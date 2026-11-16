@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="696" viewBox="0 0 560 696" font-family="Inter, Segoe UI, Helvetica Neue, Arial, sans-serif">
+<rect width="560" height="696" fill="#ffffff"/>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#323232"/></marker>
+</defs>
+<rect x="32" y="32" width="496" height="486" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="280" y="58" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Herramienta</text>
+<rect x="56" y="78" width="448" height="108" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="280" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">operations/</text>
+<text x="280" y="126" font-size="13" fill="#323232" text-anchor="middle">Una carpeta por operación</text>
+<text x="280" y="144" font-size="13" fill="#323232" text-anchor="middle">Declara qué parámetros recibe</text>
+<text x="280" y="162" font-size="13" fill="#323232" text-anchor="middle">Decide qué dice cada cambio</text>
+<rect x="56" y="232" width="448" height="108" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="280" y="258" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">core/</text>
+<text x="280" y="280" font-size="13" fill="#323232" text-anchor="middle">Contrato de operación y puertos</text>
+<text x="280" y="298" font-size="13" fill="#323232" text-anchor="middle">Resolución de la entrada y del activo</text>
+<text x="280" y="316" font-size="13" fill="#323232" text-anchor="middle">Evaluador de reglas y plan de cambios</text>
+<rect x="56" y="386" width="448" height="108" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="280" y="412" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">cli/</text>
+<text x="280" y="434" font-size="13" fill="#323232" text-anchor="middle">Analiza argumentos y despacha</text>
+<text x="280" y="452" font-size="13" fill="#323232" text-anchor="middle">Compone los adaptadores</text>
+<text x="280" y="470" font-size="13" fill="#323232" text-anchor="middle">Traduce el error a código de salida</text>
+<polyline points="190.4,186 190.4,232" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="152.9" y="198" width="75.0" height="22" fill="#ffffff" stroke="none"/>
+<text x="190.4" y="214" font-size="13" fill="#323232" text-anchor="middle">depende de</text>
+<polyline points="369.59999999999997,386 369.59999999999997,340" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="332.1" y="352" width="75.0" height="22" fill="#ffffff" stroke="none"/>
+<text x="369.59999999999997" y="368" font-size="13" fill="#323232" text-anchor="middle">depende de</text>
+<rect x="32" y="574" width="496" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="280" y="600" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Efectos del entorno</text>
+<text x="280" y="622" font-size="13" fill="#323232" text-anchor="middle">Archivos, registro de paquetes,</text>
+<text x="280" y="640" font-size="13" fill="#323232" text-anchor="middle">terminal, reloj y procesos</text>
+<polyline points="280,494 280,574" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="227.3" y="535" width="105.5" height="22" fill="#ffffff" stroke="none"/>
+<text x="280" y="551" font-size="13" fill="#323232" text-anchor="middle">toca el entorno</text>
+</svg>

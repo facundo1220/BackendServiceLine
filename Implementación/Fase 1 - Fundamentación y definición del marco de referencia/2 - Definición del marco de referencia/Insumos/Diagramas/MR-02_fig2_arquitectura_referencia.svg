@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="594" viewBox="0 0 820 594" font-family="Inter, Segoe UI, Helvetica Neue, Arial, sans-serif">
+<rect width="820" height="594" fill="#ffffff"/>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#323232"/></marker>
+</defs>
+<rect x="32" y="32" width="756" height="530" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="410" y="58" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Adaptadores</text>
+<rect x="56" y="170" width="708" height="276" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="410" y="201" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Núcleo</text>
+<rect x="80" y="216" width="660" height="90" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="410" y="242" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Capa de aplicación</text>
+<text x="410" y="264" font-size="13" fill="#323232" text-anchor="middle">Un caso de uso por operación</text>
+<text x="410" y="282" font-size="13" fill="#323232" text-anchor="middle">No contiene reglas de negocio</text>
+<rect x="80" y="324" width="660" height="108" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="410" y="350" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Capa de dominio</text>
+<text x="410" y="372" font-size="13" fill="#323232" text-anchor="middle">Entidad · Agregado y raíz · Repositorio</text>
+<text x="410" y="390" font-size="13" fill="#323232" text-anchor="middle">Evento de dominio · Objeto de valor</text>
+<text x="410" y="408" font-size="13" fill="#323232" text-anchor="middle">Servicio de dominio</text>
+<rect x="56" y="78" width="340" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="226" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Transporte HTTP</text>
+<text x="226" y="126" font-size="13" fill="#323232" text-anchor="middle">Controlador, request y response</text>
+<rect x="424" y="78" width="340" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="594" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Consumo de eventos</text>
+<text x="594" y="126" font-size="13" fill="#323232" text-anchor="middle">Manejador de evento entrante</text>
+<rect x="56" y="466" width="221" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="166.5" y="492" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Persistencia</text>
+<text x="166.5" y="514" font-size="13" fill="#323232" text-anchor="middle">Repositorio del agregado</text>
+<rect x="300" y="466" width="221" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="410.5" y="492" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Publicación de eventos</text>
+<text x="410.5" y="514" font-size="13" fill="#323232" text-anchor="middle">Adaptador en proceso</text>
+<rect x="543" y="466" width="221" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="653.5" y="492" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Observabilidad</text>
+<text x="653.5" y="514" font-size="13" fill="#323232" text-anchor="middle">Logger y traza</text>
+<polyline points="226,150 226,170" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="594,150 594,170" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="166.5,466 166.5,446" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="410.5,466 410.5,446" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="653.5,466 653.5,446" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+</svg>

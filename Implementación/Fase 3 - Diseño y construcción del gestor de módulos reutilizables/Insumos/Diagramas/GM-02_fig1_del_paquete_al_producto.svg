@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="440" viewBox="0 0 860 440" font-family="Inter, Segoe UI, Helvetica Neue, Arial, sans-serif">
+<rect width="860" height="440" fill="#ffffff"/>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#323232"/></marker>
+</defs>
+<rect x="32" y="32" width="390" height="376" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="227" y="58" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Viaja en el paquete del módulo</text>
+<rect x="470" y="32" width="358" height="358" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="649" y="58" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Se genera dentro del producto</text>
+<rect x="56" y="78" width="342" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="227" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Manifiesto</text>
+<text x="227" y="126" font-size="13" fill="#323232" text-anchor="middle">bsl-module.json</text>
+<text x="227" y="144" font-size="13" fill="#323232" text-anchor="middle">El módulo se describe a sí mismo</text>
+<rect x="56" y="186" width="342" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="227" y="212" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Adaptadores</text>
+<text x="227" y="234" font-size="13" fill="#323232" text-anchor="middle">Implementan puertos del contrato</text>
+<text x="227" y="252" font-size="13" fill="#323232" text-anchor="middle">Nunca adaptadores de entrada</text>
+<rect x="56" y="294" width="342" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="227" y="320" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Plantillas</text>
+<text x="227" y="342" font-size="13" fill="#323232" text-anchor="middle">Del adaptador que el producto recibe</text>
+<text x="227" y="360" font-size="13" fill="#323232" text-anchor="middle">Nunca una clase base</text>
+<rect x="494" y="78" width="310" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="649" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Cableado</text>
+<text x="649" y="126" font-size="13" fill="#323232" text-anchor="middle">En el punto de composición</text>
+<text x="649" y="144" font-size="13" fill="#323232" text-anchor="middle">Nombrado por el agregado</text>
+<rect x="494" y="186" width="310" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="649" y="212" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Registro</text>
+<text x="649" y="234" font-size="13" fill="#323232" text-anchor="middle">Módulo, versión y huella</text>
+<text x="649" y="252" font-size="13" fill="#323232" text-anchor="middle">En project.json</text>
+<rect x="494" y="294" width="310" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="649" y="320" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Dependencia</text>
+<text x="649" y="342" font-size="13" fill="#323232" text-anchor="middle">El rango en package.json</text>
+<polyline points="422,220 470,220" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+</svg>

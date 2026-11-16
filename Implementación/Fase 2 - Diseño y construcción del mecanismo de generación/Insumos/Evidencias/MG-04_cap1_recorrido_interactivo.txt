@@ -1,0 +1,24 @@
+Comando: bsl new
+Herramienta: @bsl/cli 0.33.0
+Columnas: 100   Lineas: 15   Lienzo: 992x356 px
+Impreso: 7.34pt con fraccion 1.00
+Codigo de salida: -15  (interrumpido a proposito al llegar a la pantalla que se captura)
+Fecha: 2026-11-12
+
+Salida capturada, sin editar:
+
+  ____   ____  _
+ | __ ) / ___|| |
+ |  _ \ \___ \| |
+ | |_) | ___) | |___
+ |____/ |____/|_____|
+ BACKEND SERVICE LINE · 0.33.0
+
+  >   Catalog 0.6.0 from the cache
+? Template to derive the project from
+❯ nestjs-hexagonal-api
+  azure-functions-api
+
+Template of a synchronous HTTP API of a BIAN service domain, on NestJS and a hexagonal layout. It de
+scribes what its product is made of in its own manifest.
+↑↓ navigate • ⏎ select

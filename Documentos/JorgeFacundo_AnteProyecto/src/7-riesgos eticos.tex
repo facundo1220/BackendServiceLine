@@ -1,0 +1,36 @@
+%%%%%%%%%%%%%%%%
+% RIESGOS TECNICOS
+%%%%%%%%%%%%%%%%
+
+\section{Riesgos Éticos}
+
+Los sistemas orientados a estandarizar y automatizar el ciclo de vida de aplicaciones concentran en un único punto decisiones técnicas que se replican en múltiples proyectos. Cuando estos sistemas se aplican en contextos financieros, dicha concentración adquiere una gran importancia, debido al manejo de información sensible, lógica de negocio regulada y estándares de alta criticidad. Esto implica analizar los siguientes riesgos éticos:
+
+\begin{itemize}
+
+    \item \textbf{Exposición de información sensible en plantillas y módulos}  
+    
+    La centralización de plantillas, configuraciones y módulos en un repositorio compartido introduce el riesgo de que credenciales, configuraciones de infraestructura o detalles arquitectónicos internos queden embebidos en dichos artefactos de forma intencional o accidental. En entornos bancarios, esta situación puede generar vulnerabilidades de seguridad e incumplimiento de regulaciones financieras que afecten a múltiples sistemas. 
+    
+    Para mitigarlo, es necesario establecer una separación estricta entre estructura base y valores de configuración sensibles, promoviendo el uso de variables de entorno y mecanismos de gestión de secretos desde el diseño del sistema.
+    
+    \item \textbf{Propagación de lógica financiera mal interpretada}  
+    
+    Los módulos reutilizables que encapsulan lógica alineada con estándares como BIAN o ISO 20022 requieren un conocimiento especializado tanto técnico como del negocio bancario para su correcta implementación. Una interpretación incorrecta de estos estándares puede generar que los módulos manejen inadecuadamente operaciones financieras y dado que estos módulos se comparten entre proyectos, se puede propagar el error. 
+    
+    Para mitigar este riesgo, los módulos con lógica financiera deben implementar revisiones técnicas especializadas antes de incorporarse al catálogo reutilizable.
+    
+    \item \textbf{Exclusión de equipos con menor capacidad técnica}  
+    
+    La estandarización arquitectónica basada en conceptos como arquitectura hexagonal y diseño orientado al dominio exige un nivel de madurez técnica considerable. Cuando el sistema se diseña pensando únicamente en perfiles avanzados, los equipos con menor experiencia encuentran barreras para adoptarlo y comprenderlo, generando una brecha interna que concentra el conocimiento en pocos perfiles. 
+    
+    Para reducir este riesgo, resulta fundamental elaborar documentación accesible orientada a distintos niveles de experiencia y acompañar la adopción con procesos de formación y transferencia de conocimiento.
+    
+    \item \textbf{Concentración de poder técnico en quienes controlan el sistema}  
+
+    Por su naturaleza centralizada, estos sistemas otorgan una influencia sobre las decisiones técnicas de la organización a quienes los definen y mantienen. Sin mecanismos de gobernanza claros, esta concentración puede generar que la evolución del sistema responda a criterios particulares o intereses de un grupo reducido en lugar de las necesidades reales de los equipos, generando dependencias institucionales riesgosas.
+    
+    Para evitar este riesgo, resulta necesario definir un modelo de gobernanza distribuido que establezca procesos participativos para la incorporación de cambios, garantice que el conocimiento sobre el sistema quede documentado de forma exhaustiva y asegure que su evolución responda a las necesidades colectivas de los equipos.
+       
+\end{itemize}
+

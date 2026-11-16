@@ -1,0 +1,29 @@
+Comando: bsl templates list
+Herramienta: @bsl/cli 0.33.0
+Columnas: 86   Lineas: 20   Lienzo: 858x464 px
+Impreso: 8.48pt con fraccion 1.00
+Codigo de salida: 0
+Fecha: 2026-11-12
+
+Salida capturada, sin editar:
+
+  ____   ____  _
+ | __ ) / ___|| |
+ |  _ \ \___ \| |
+ | |_) | ___) | |___
+ |____/ |____/|_____|
+ BACKEND SERVICE LINE · 0.33.0
+
+  >   Catalog 0.6.0 from the cache
+
+Templates of the organization
+─────────────────────────────
+ID                    PACKAGE                    PUBLISHED  OWNER            STATUS
+────────────────────────────────────────────────────────────
+nestjs-hexagonal-api  @bsl/nestjs-hexagonal-api  0.21.0     Line governance  active
+azure-functions-api   @bsl/azure-functions-api   0.2.0      Line governance  active
+
+Next steps:
+───────────
+  bsl new --template nestjs-hexagonal-api
+  bsl templates show nestjs-hexagonal-api

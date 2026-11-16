@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="692" viewBox="0 0 620 692" font-family="Inter, Segoe UI, Helvetica Neue, Arial, sans-serif">
+<rect width="620" height="692" fill="#ffffff"/>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#323232"/></marker>
+</defs>
+<rect x="100" y="252" width="460" height="300" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="330" y="278" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Núcleo — no conoce el exterior</text>
+<rect x="210" y="32" width="200" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="310" y="58" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">src/</text>
+<text x="310" y="80" font-size="13" fill="#323232" text-anchor="middle">Un bounded context por proyecto</text>
+<rect x="120" y="142" width="420" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="330" y="168" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">config/</text>
+<text x="330" y="190" font-size="13" fill="#323232" text-anchor="middle">Esquema de variables de entorno</text>
+<text x="330" y="208" font-size="13" fill="#323232" text-anchor="middle">Lectura única al arrancar</text>
+<rect x="120" y="298" width="420" height="108" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="330" y="324" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">domain/</text>
+<text x="330" y="346" font-size="13" fill="#323232" text-anchor="middle">shared/ · &lt;agregado&gt;/</text>
+<text x="330" y="364" font-size="13" fill="#323232" text-anchor="middle">Entidad, repositorio y eventos</text>
+<text x="330" y="382" font-size="13" fill="#323232" text-anchor="middle">No depende de nada más</text>
+<rect x="120" y="424" width="420" height="108" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="330" y="450" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">application/</text>
+<text x="330" y="472" font-size="13" fill="#323232" text-anchor="middle">&lt;operación&gt;/</text>
+<text x="330" y="490" font-size="13" fill="#323232" text-anchor="middle">Un caso de uso por operación</text>
+<text x="330" y="508" font-size="13" fill="#323232" text-anchor="middle">Orquesta el dominio y los puertos</text>
+<rect x="120" y="572" width="420" height="108" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="330" y="598" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">infrastructure/</text>
+<text x="330" y="620" font-size="13" fill="#323232" text-anchor="middle">http/ · persistence/ · logging/</text>
+<text x="330" y="638" font-size="13" fill="#323232" text-anchor="middle">events/ · configuration/</text>
+<text x="330" y="656" font-size="13" fill="#323232" text-anchor="middle">Adaptadores de entrada y de salida</text>
+<polyline points="310,104 310,122 80,122 80,626" fill="none" stroke="#323232" stroke-width="1.6"/>
+<polyline points="80,187 120,187" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="80,352 120,352" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="80,478 120,478" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="80,626 120,626" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+</svg>

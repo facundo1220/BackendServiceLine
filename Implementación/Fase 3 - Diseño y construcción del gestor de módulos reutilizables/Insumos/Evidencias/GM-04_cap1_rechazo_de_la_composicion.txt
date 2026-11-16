@@ -1,0 +1,23 @@
+Comando: bsl modules add persistence
+Herramienta: @bsl/cli 0.33.0
+Columnas: 100   Lineas: 14   Lienzo: 992x334 px
+Impreso: 7.34pt con fraccion 1.00
+Codigo de salida: 1
+Fecha: 2026-11-12
+
+Salida capturada, sin editar:
+
+  ____   ____  _
+ | __ ) / ___|| |
+ |  _ \ \___ \| |
+ | |_) | ___) | |___
+ |____/ |____/|_____|
+ BACKEND SERVICE LINE · 0.33.0
+
+  >   Catalog 0.6.0 from the cache
+  >   Resolving @bsl/persistence@0.4.0
+  ok  @bsl/persistence@0.4.0 resolved  1ms
+  x   The module 'persistence' serves nestjs-hexagonal@1, and term-deposit-fn is of shape azure-func
+tions@1. A module writes at the insertion points of a shape and binds its ports, so it is not a ques
+tion of effort: incorporating it would leave this product broken. 'bsl templates list' says which te
+mplate derives which shape.

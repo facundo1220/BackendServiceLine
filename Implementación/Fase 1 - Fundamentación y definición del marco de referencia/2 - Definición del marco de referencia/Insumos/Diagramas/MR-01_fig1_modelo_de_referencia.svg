@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="692" viewBox="0 0 860 692" font-family="Inter, Segoe UI, Helvetica Neue, Arial, sans-serif">
+<rect width="860" height="692" fill="#ffffff"/>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#323232"/></marker>
+</defs>
+<text x="240" y="50" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Espacio del problema</text>
+<text x="644" y="50" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Espacio de la solución</text>
+<rect x="56" y="66" width="772" height="160" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="442" y="92" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Ingeniería de dominio</text>
+<rect x="56" y="260" width="772" height="160" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="442" y="286" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Ingeniería de aplicación</text>
+<rect x="56" y="500" width="772" height="160" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="442" y="526" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Dos desviaciones declaradas</text>
+<rect x="80" y="112" width="320" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="240" y="138" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Análisis del dominio</text>
+<text x="240" y="160" font-size="13" fill="#323232" text-anchor="middle">Alcance de la familia de productos</text>
+<text x="240" y="178" font-size="13" fill="#323232" text-anchor="middle">Modelo de características y binding</text>
+<rect x="484" y="112" width="320" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="644" y="138" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Implementación del dominio</text>
+<text x="644" y="160" font-size="13" fill="#323232" text-anchor="middle">Plantillas, módulos y contrato</text>
+<text x="644" y="178" font-size="13" fill="#323232" text-anchor="middle">Arquitectura de referencia</text>
+<rect x="80" y="306" width="320" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="240" y="332" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Análisis de requerimientos</text>
+<text x="240" y="354" font-size="13" fill="#323232" text-anchor="middle">La necesidad de un equipo</text>
+<text x="240" y="372" font-size="13" fill="#323232" text-anchor="middle">Selección sobre el modelo</text>
+<rect x="484" y="306" width="320" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="644" y="332" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Derivación del producto</text>
+<text x="644" y="354" font-size="13" fill="#323232" text-anchor="middle">Ensamblaje, cableado y registro</text>
+<text x="644" y="372" font-size="13" fill="#323232" text-anchor="middle">Proyecto backend ejecutable</text>
+<rect x="80" y="546" width="350" height="90" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="255" y="572" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Producto autónomo</text>
+<text x="255" y="594" font-size="13" fill="#323232" text-anchor="middle">El equipo lo modifica fuera</text>
+<text x="255" y="612" font-size="13" fill="#323232" text-anchor="middle">del ciclo y conserva el vínculo</text>
+<rect x="454" y="546" width="350" height="90" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="629" y="572" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Derivación por etapas</text>
+<text x="629" y="594" font-size="13" fill="#323232" text-anchor="middle">La selección puede repetirse</text>
+<text x="629" y="612" font-size="13" fill="#323232" text-anchor="middle">sobre un producto ya derivado</text>
+<polyline points="400,157 484,157" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="416.1" y="145" width="51.8" height="22" fill="#ffffff" stroke="none"/>
+<text x="442" y="161" font-size="13" fill="#323232" text-anchor="middle">mapeo</text>
+<polyline points="400,351 484,351" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="401.8" y="325" width="80.4" height="22" fill="#ffffff" stroke="none"/>
+<text x="442" y="341" font-size="13" fill="#323232" text-anchor="middle">selección</text>
+<polyline points="240,202 240,306" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="178.4" y="231" width="123.3" height="22" fill="#ffffff" stroke="none"/>
+<text x="240" y="247" font-size="13" fill="#323232" text-anchor="middle">características</text>
+<polyline points="644,202 644,306" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="582.4" y="231" width="123.3" height="22" fill="#ffffff" stroke="none"/>
+<text x="644" y="247" font-size="13" fill="#323232" text-anchor="middle">activos comunes</text>
+<polyline points="644,396 644,462 40,462 40,157 80,157" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#p)"/>
+<rect x="250.5" y="450" width="159.0" height="22" fill="#ffffff" stroke="none"/>
+<text x="330" y="466" font-size="13" fill="#323232" text-anchor="middle">retorno del producto</text>
+</svg>

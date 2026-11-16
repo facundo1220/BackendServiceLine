@@ -1,0 +1,701 @@
+%%==========================================================
+%% CAPÍTULO 3: ANÁLISIS DEL PROBLEMA Y MARCO DE REFERENCIA DE LA SOLUCIÓN
+%%==========================================================
+\label{cap:fundamentacion}
+
+La primera fase de la metodología del proyecto (Figura~\ref{fig:metodologia})
+persiguió dos propósitos, el primero de los cuales fue demostrar con evidencia
+que el problema existe y establecer en qué consiste exactamente, y el segundo
+definir cómo debía estructurarse la solución antes de escribir la primera
+línea de código. Al cerrarla quedó establecido qué debe hacer la herramienta y
+qué forma deben tener los proyectos que produzca.
+
+El trabajo se organizó en dos bloques, y el primero reunió la
+evidencia que sustenta el proyecto, levantando el contexto donde la
+herramienta iba a operar, el testimonio de quienes trabajan en él y lo que
+ofrecen las soluciones existentes, hasta especificar formalmente qué debía
+construirse. El segundo definió el encuadre de la solución y los fundamentos
+sobre los que se apoya, que es diseño de alto nivel y llega hasta ahí, porque
+las reglas concretas que gobiernan la forma de lo que la línea produce se
+definen en la fase que las construye y las verifica.
+
+Lo que este capítulo presenta es una síntesis del proceso y del argumento que
+de él resultó, mientras que el detalle completo de cada instrumento, las
+transcripciones de las entrevistas, la evaluación de cada solución frente a
+cada eje y la ficha de cada requerimiento se conservan en los documentos de la
+Fase 1, disponibles en el repositorio del proyecto.
+
+\section{Comprensión del problema y especificación}
+\label{sec:comprension-problema}
+
+La dimensión del problema de la fase consistió en aplicar un proceso de
+obtención de requisitos sobre un caso de estudio, para comprender cómo se
+inicia un proyecto backend y cómo se integran funcionalidades reutilizables en
+la práctica real de un equipo de desarrollo.
+El caso de estudio fue el Laboratorio Digital del Banco W
+\citep{UniversidadIcesi2023}, cuyas prácticas, roles y restricciones
+alimentaron la especificación de requerimientos de la herramienta.
+
+\subsection{Caracterización del contexto de aplicación}
+\label{sec:caracterizacion}
+
+El Laboratorio Digital opera bajo marcos de trabajo ágiles, con Scrum y una
+práctica de Dual Track que alinea el discovery con el delivery en sprints de
+dos semanas \citep{MartyCagan2012}, y su composición de roles corresponde a la
+de un equipo ágil, con desarrolladores, testers, un líder técnico y líderes de
+producto. Su equipo técnico es reducido y estable, con cuatro desarrolladores
+que atienden varios productos a la vez.
+
+Como todo equipo que construye software dentro de una organización regulada,
+trabaja en dos planos a la vez, porque conserva autonomía sobre la
+construcción interna de sus soluciones, que es donde decide cómo se estructura
+y se escribe el código de cada producto, y al mismo tiempo se subordina a las
+definiciones de las funciones institucionales de tecnología, que establecen
+los estándares a los que todo desarrollo debe ajustarse y las condiciones bajo
+las cuales un servicio se integra con los sistemas centrales y llega a operar.
+Esa frontera delimita sobre qué puede actuar legítimamente una herramienta de
+generación, porque lo que produce pertenece por entero al primer plano y nada
+de lo que genera puede alterar lo que la organización impone.
+
+\subsection{Identificación y justificación de stakeholders}
+\label{sec:stakeholders}
+
+Definido el contexto, el paso siguiente fue establecer a quiénes consultar, y
+la selección de roles condiciona lo que se va a encontrar, porque un
+arquitecto, un desarrollador y un líder técnico ven cosas distintas del mismo
+problema, y por eso el criterio se fijó antes de entrevistar. Se consideró
+stakeholder a quien usa la herramienta, a quien fija reglas que esta debe
+respetar, a quien puede habilitar o bloquear su adopción, y a quien ve cambiar
+su trabajo por ella aunque no la use. Para ordenarlos se adoptó el modelo de
+capas (\emph{onion model}) de Alexander \citep{Alexander2005}, que los agrupa
+según su cercanía al artefacto, desde quienes lo operan hasta quienes solo
+imponen condiciones sobre él.
+
+La Tabla~\ref{tab:roles} recoge los roles consultados, la capa a la que
+pertenecen y lo que se esperaba de la perspectiva de cada uno.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{3.2cm}p{2.6cm}p{9.4cm}}
+\toprule
+\textbf{Rol} & \textbf{Capa} & \textbf{Aporte esperado} \\
+\midrule
+Desarrolladores backend & Núcleo & Desagregación del proceso de arranque, puntos de dolor concretos y criterio sobre qué estandarizar \\
+Testers & Núcleo & Requerimientos de consistencia externa de APIs e interfaces, y evidencia de heterogeneidad entre productos \\
+Líder técnico & Sistema contenedor & Visión consolidada de la divergencia entre proyectos y consideraciones de gobernanza del catálogo \\
+Líder de producto & Sistema contenedor & Impacto del tiempo de arranque e integración sobre la planeación de productos \\
+Arquitectura & Entorno & Condiciones de diseño de un módulo de integración, organización de dominios y criterios de evolución \\
+Desarrolladores externos & Entorno & Contraste sobre qué problemas son generales de la industria y qué mecanismos de reutilización aplican otras organizaciones \\
+\bottomrule
+\end{tabular}
+}
+\caption{Roles consultados, por capa del modelo de Alexander}
+\label{tab:roles}
+\end{table}
+
+Los cuatro primeros roles pertenecen al equipo estudiado y los dos últimos no.
+La función de arquitectura representa las definiciones a las que cualquier
+desarrollo se subordina en una organización regulada, y fue la única fuente
+que aportó condiciones de diseño en lugar de descripción de la práctica. Los
+desarrolladores externos permiten separar lo propio del contexto estudiado de
+lo que ocurre también en otras organizaciones. Las funciones consultadas son
+arquetipos de cualquier equipo de producto con estas características, y es eso
+lo que permite trasladar el análisis a otro contexto del mismo tipo.
+
+\subsection{Protocolo de recolección de información}
+\label{sec:protocolo}
+
+La información se recolectó mediante entrevistas semiestructuradas de diseño
+mixto, con nueve entrevistas repartidas en seis guiones, uno por cada rol
+consultado. Una primera parte de preguntas abiertas recogió el proceso actual,
+los puntos de dolor y el criterio de cada entrevistado, y es la que sostiene el
+análisis cualitativo del que se derivan los temas, mientras que una segunda
+parte más breve, de preguntas cerradas y respondida en los minutos finales,
+produjo datos agregables que complementan las respuestas abiertas.
+
+Esas preguntas cerradas se aplicaron antes de que existiera la primera línea de
+código de la herramienta, de modo que son la única fuente de autoreporte
+anterior al artefacto, y sobre ellas se constituyó la línea base con la que
+compara la evaluación del Capítulo~\ref{cap:evaluacion}.
+
+\subsection{Análisis cualitativo y temas derivados}
+\label{sec:analisis-cualitativo}
+
+Al ser las entrevistas de preguntas abiertas, cada entrevistado describió su
+propia experiencia con sus propias palabras, de modo que el material se
+transcribió y se analizó buscando qué se repetía de un testimonio a otro,
+con el fin de encontrar los patrones de la problemática y no opiniones
+aisladas. De ese análisis salieron quince temas, que recogen lo que los
+entrevistados describieron de su práctica sin redactarlo como requerimiento ni
+proponer una solución, y que se agruparon después en los cinco conjuntos de la
+Tabla~\ref{tab:grupos}, porque es la agrupación la que permite analizarlos y la
+que da origen a los requerimientos.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{2.9cm}p{1.7cm}p{6.9cm}p{3.1cm}}
+\toprule
+\textbf{Grupo} & \textbf{Temas} & \textbf{Lo que el testimonio muestra} & \textbf{Roles que lo evidencian} \\
+\midrule
+El costo del arranque & T-01, T-02, T-03 & Arrancar un proyecto es un proceso manual, concentrado en una persona, que impone un costo cognitivo inicial, se paga en alcance de negocio y resulta invisible para el negocio & Desarrolladores, líder técnico, líder de producto, externos \\
+La reutilización y su propagación & T-04, T-05, T-09 & Existe un núcleo reconocido de funcionalidades que se repite entre productos, pero sin un mecanismo formal se recurre a copiarlo, y el contrato del servicio es el punto más frágil al propagar un cambio & Desarrolladores, arquitectura, líder de producto, externos \\
+Causas estructurales de la divergencia & T-06, T-07, T-08 & Los proyectos divergen porque nada propaga las mejoras ni refuerza el estándar, porque se diseña para el alcance inmediato y porque el conocimiento transversal llega tarde & Líder de producto, líder técnico, arquitectura, externos \\
+Condiciones de diseño & T-10, T-11, T-12, T-13 & La solución debe estandarizar con rigidez justificada, separar lo fijo de lo variable, evolucionar por versiones y poder verificarse & Todos los roles consultados \\
+Condiciones de adopción y permanencia & T-14, T-15 & Adoptar requiere agilidad real y uso sencillo; permanecer requiere capacidad de evolución y un responsable definido & Desarrolladores, líder técnico, arquitectura, externos \\
+\bottomrule
+\end{tabular}
+}
+\caption{Los quince temas del análisis cualitativo, por grupo}
+\label{tab:grupos}
+\end{table}
+
+El respaldo de los temas no es uniforme, porque catorce de los quince los
+evidencia más de un rol, y tres de ellos aparecen en cuatro o cinco roles
+distintos, lo que los sitúa como hallazgos compartidos entre perspectivas que
+miran el mismo problema desde lugares diferentes. El único que sostiene un
+solo rol es el que afirma que lo fijado en el código impide reutilizarlo
+después, evidenciado por el líder de producto, y se conservó porque introduce
+una causa estructural que ningún otro nombró, con el respaldo menor que eso
+supone.
+
+Los quince temas, agrupados así, son la unidad de trabajo del resto del
+proyecto. Todo requerimiento posterior cita el tema o los temas que lo
+originan, y el cierre del proyecto, en el Capítulo~\ref{cap:evaluacion}, se
+formula contra los requerimientos y las brechas.
+
+\subsection{Estudio comparativo de soluciones existentes}
+\label{sec:estudio-comparativo}
+
+Establecido qué muestra cada grupo temático, el paso siguiente fue medir qué
+parte de eso resuelven ya las soluciones disponibles y qué parte no resuelve
+ninguna, que es lo que determina si el problema planteado en la
+sección~\ref{sec:planteamiento} queda cubierto por una herramienta existente.
+La comparación se hizo sobre las ocho soluciones descritas en el estado del
+arte (sección~\ref{sec:estado-del-arte}), que el Capítulo~\ref{cap:marco}
+describe una por una y que esta sección evalúa frente a los pilares que los
+temas establecieron, sin volver a describir ninguna.
+
+Cada eje del marco de evaluación responde a un tema documentado con evidencia
+de entrevistas, en lugar de a un inventario genérico de funcionalidades, de
+modo que la comparación mide la distancia entre cada solución y el problema
+real del contexto. Se excluyó el tema T-03, por tratarse de un efecto
+organizacional y no de una capacidad evaluable en una herramienta, y los
+catorce restantes quedan cubiertos por al menos un eje de la
+Tabla~\ref{tab:ejes}, sin que ningún eje quede sin tema de origen.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{3.2cm}p{5.3cm}p{1.2cm}p{4.6cm}}
+\toprule
+\textbf{Enfoque} & \textbf{Eje} & \textbf{Temas} & \textbf{Qué significa cumplirlo} \\
+\midrule
+Generación de proyectos & Generación desde plantilla & T-01, T-02 & Producir un proyecto ejecutable a partir de una plantilla parametrizable, sin intervención manual \\
+ & Contenido resuelto de origen & T-07, T-08 & Que el proyecto traiga ya resueltas las capacidades transversales y las restricciones que suelen descubrirse tarde \\
+ & Externalización de la configuración & T-11 & Que lo susceptible de cambiar quede fuera del código y lo estable no \\
+\midrule
+Ciclo de vida & Composición de módulos en proyectos existentes & T-04, T-09 & Incorporar una capacidad transversal a un proyecto ya en curso, de forma desacoplada \\
+ & Propagación de cambios de una capacidad compartida & T-05 & Que un cambio en una capacidad alcance a los proyectos que la usan sin intervenirlos uno por uno \\
+ & Consistencia entre proyectos en el tiempo & T-06 & Detectar y corregir la desviación entre proyectos generados con versiones distintas \\
+ & Versionado y distribución & T-12 & Que las capacidades y la herramienta evolucionen por versiones con adopción gradual \\
+\midrule
+Adopción y gobernanza & Adaptabilidad de lo generado & T-10 & Que el resultado se pueda modificar sin romper la relación con la herramienta \\
+ & Verificabilidad & T-13 & Que lo generado y la herramienta puedan someterse a verificación automática \\
+ & Costo de uso & T-14 & Que generar un proyecto cueste un comando o pocos comandos, sin configuración previa extensa \\
+ & Gobernanza del catálogo & T-15 & Que exista un catálogo con propiedad, control de acceso y reglas de incorporación \\
+\bottomrule
+\end{tabular}
+}
+\caption{Los once ejes del marco de evaluación y el tema que cada uno atiende}
+\label{tab:ejes}
+\end{table}
+
+La evaluación de las ocho soluciones frente a los once ejes, celda por celda,
+se conserva en el estudio comparativo de la Fase 1, disponible en el
+repositorio del proyecto. Su lectura agregada es que ninguna cubre los tres
+enfoques a la vez. Las herramientas de plantilla
+resuelven la generación y el costo de uso, pero no la composición sobre un
+proyecto en curso ni la gobernanza; las que sostienen el ciclo de vida toman
+la plantilla completa como unidad de cambio; y las plataformas de desarrollo
+interno resuelven el catálogo y la propiedad al precio de desplegar y operar
+una aplicación propia.
+
+\paragraph*{Brechas identificadas}
+\label{sec:brechas}
+
+Del cruce entre las ocho soluciones y los once ejes surgen tres capacidades
+que el contexto necesita y que ninguna herramienta del mercado resuelve.
+
+\textbf{B-01. Incorporar un módulo a un proyecto en curso.} Cuando meses
+después un proyecto necesita autenticación, observabilidad o el consumo de un
+servicio compartido, no hay forma de incorporarlo salvo a mano. La solución
+más cercana modifica código existente en lugar de limitarse a crear archivos
+nuevos, pero exige que todos los proyectos convivan en un mismo repositorio,
+y el contexto estudiado trabaja con repositorios independientes.
+
+\textbf{B-02. Propagar el cambio de un módulo.} Cuando una capacidad
+compartida se copió a varios proyectos y después cambia, el cambio debe
+llegar a todos sin intervenir cada uno a mano. Las soluciones más cercanas
+registran la versión de plantilla que usó el proyecto y aplican los cambios
+preservando las modificaciones locales, pero su unidad es la plantilla
+completa. Lo que cambia en el caso documentado es una capacidad puntual y no
+la estructura, de modo que actualizar la plantilla entera no propaga el
+cambio de un módulo.
+
+\textbf{B-03. Catálogo con reglas y bajo costo de uso.} Sostener un catálogo
+exige propiedad definida, control de acceso y reglas de incorporación, sin
+que eso encarezca el uso diario. Las soluciones más cercanas lo ofrecen, pero
+exigen desplegar, configurar y operar una aplicación propia antes de generar
+el primer proyecto, un costo desproporcionado para un equipo de cuatro
+desarrolladores. En el extremo opuesto, las herramientas de un comando no
+tienen catálogo alguno.
+
+Las tres brechas cumplen una doble función, porque justifican construir algo
+nuevo en lugar de adoptar una herramienta existente, y funcionan como criterio
+de prioridad, porque un requerimiento que cierra una brecha es imprescindible
+mientras que otro que solo mejora la experiencia de uso puede diferirse.
+
+\subsection{Especificación de requerimientos}
+\label{sec:especificacion-requerimientos}
+
+De los quince temas, que expresan qué espera resolver el equipo, y de las tres
+brechas, que delimitan lo que ninguna solución existente cubre, salieron
+veintidós requerimientos, dieciséis funcionales y seis no funcionales. Con
+ellos cierra el bloque de evidencia, porque son la forma verificable de todo
+lo que las subsecciones anteriores establecieron.
+
+A diferencia del tema, que describe lo que ocurre en la práctica, el
+requerimiento fija un alcance concreto y establece qué debe hacer la
+herramienta, sobre qué actúa y bajo qué condición se da por satisfecho. Por eso
+cada uno se acompaña de su criterio de aceptación, que es el que vuelve
+verificable aquello que el tema solo enunciaba, y la ficha de los veintidós,
+con su enunciado, su prioridad, su origen y su criterio, se conserva en la
+especificación de requerimientos de la Fase 1, disponible en el repositorio del
+proyecto.
+
+\subsubsection*{Prioridad y cobertura}
+
+Los requerimientos se priorizaron con la escala MoSCoW, cuyos niveles se
+asignan según el origen de cada uno y no según la preferencia del
+implementador. Es imprescindible el que responde a una de las tres brechas o
+sin el cual la solución no resuelve el problema levantado; importante, el que
+responde a un tema documentado pero cuya ausencia no invalida la
+solución en esta fase; y deseable, el que aporta valor comprobado y puede
+quedar fuera si el alcance lo exige.
+
+Los dieciséis requerimientos funcionales se enuncian sobre las dos capacidades
+centrales de la herramienta, generar proyectos e incorporar módulos, y sobre
+las dos condiciones que las sostienen en el tiempo, la actualización y el
+catálogo. La Tabla~\ref{tab:rf} recoge qué exige cada una y de qué temas y
+brechas proviene.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{3.1cm}p{7.6cm}p{1.6cm}p{2.3cm}}
+\toprule
+\textbf{Capacidad} & \textbf{Qué exige} & \textbf{Req.} & \textbf{Origen} \\
+\midrule
+Generación de proyectos & Producir un proyecto ejecutable y parametrizable, con la estructura y el entorno de trabajo del marco ya resueltos, su documentación de API automática y un resultado determinista ante la misma entrada & RF-01 a RF-05 & T-01, T-02, T-06, T-07, T-08, T-11 \\
+Composición de módulos & Incorporar un módulo a un proyecto existente sin que nadie edite archivos a mano, modificando lo que deba referenciarlo sin sobrescribir código propio, con consulta del estado y al menos un módulo real en el catálogo & RF-06 a RF-09 & T-04, T-09, T-15, B-01 \\
+Actualización y propagación & Registrar en el proyecto qué módulos incorporó y en qué versión, actualizarlos sin intervención manual, informar de los desactualizados y preservar el código del equipo al hacerlo & RF-10 a RF-13 & T-05, T-06, T-10, B-02 \\
+Catálogo y distribución & Declarar el catálogo de forma declarativa y versionada sin componentes de servidor, distribuir por el registro de paquetes de la organización y registrar la propiedad de cada activo & RF-14 a RF-16 & T-12, T-15, B-03 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Los dieciséis requerimientos funcionales, por capacidad de la herramienta}
+\label{tab:rf}
+\end{table}
+
+Los seis requerimientos no funcionales de la Tabla~\ref{tab:rnf} expresan los
+atributos de calidad que la herramienta y lo que produce deben satisfacer,
+con independencia de las operaciones concretas que ofrezca.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{1.4cm}p{2.9cm}p{8.9cm}p{1.3cm}}
+\toprule
+\textbf{ID} & \textbf{Atributo} & \textbf{Requerimiento} & \textbf{Origen} \\
+\midrule
+RNF-01 & Usabilidad & Las operaciones de la herramienta deben ejecutarse con un comando cada una & T-14 \\
+RNF-02 & Adaptabilidad & El código generado debe ser modificable sin que ello impida seguir usando la herramienta sobre el proyecto & T-10 \\
+RNF-03 & Verificabilidad & Lo generado debe poder someterse a análisis estático de código, incluidos aspectos de seguridad & T-13 \\
+RNF-04 & Verificabilidad & La herramienta debe poder someterse a auditoría de dependencias y vulnerabilidades, con resultado consultable & T-13 \\
+RNF-05 & Configurabilidad & El proyecto generado no debe contener valores fijos susceptibles de cambio, en particular direcciones de servicios y parámetros de negocio & T-11 \\
+RNF-06 & Evolución & La herramienta y sus módulos deben evolucionar por versiones, admitiendo la convivencia de versiones distintas entre proyectos & T-12 \\
+\bottomrule
+\end{tabular}
+}
+\caption{Requerimientos no funcionales}
+\label{tab:rnf}
+\end{table}
+
+Con la especificación queda cerrado el bloque de evidencia, y estos veintidós
+requerimientos son el insumo del bloque siguiente, donde el marco de
+referencia tendrá que habilitar cada uno o declarar a qué fase de
+construcción se difiere. La comprobación de que cada uno quedó satisfecho se
+realiza al cierre del proyecto, cuando existe el artefacto contra el cual
+verificarla.
+
+\section{Definición del marco de referencia}
+\label{sec:marco-tecnico-solucion}
+
+Establecida la evidencia del problema, el marco de referencia fija bajo qué
+enfoque de ingeniería se construye la solución y sobre qué fundamentos se
+apoya, de modo que las fases siguientes construyan dentro de límites ya
+decididos en lugar de fijarlos durante la implementación. Lo que el marco
+define no es la herramienta, sino la familia de proyectos que la herramienta
+produce, porque es esa familia la que tiene que compartir una estructura para
+que un mismo activo pueda servir a varios de sus productos.
+
+Se desarrolla en dos partes, de las cuales la primera encuadra la
+solución como una línea de producto de software, que es el enfoque que ordena
+la construcción de los activos reutilizables y la de los productos que se
+derivan de ellos, y declara con ese vocabulario qué productos forman la
+familia y cómo se organiza su construcción. La segunda adopta los fundamentos
+que dan forma al interior de cada producto y fija hasta dónde se toma cada
+uno. El marco termina ahí, porque las reglas concretas que gobiernan la forma
+de lo que la línea produce se definen y se verifican en la fase que las
+construye, y se conservan en los documentos de esa fase.
+
+\subsection{La solución como línea de producto de software}
+\label{sec:caracterizacion-lps}
+
+Una línea de producto de software es una familia de sistemas que comparten un
+conjunto común y gestionado de características y que se construyen a partir de
+activos comunes siguiendo un procedimiento establecido \citep{Clements2001}.
+Lo que la separa de una colección de proyectos parecidos es que esas
+similitudes están declaradas y gestionadas, de manera que un activo se
+construye una vez y sirve a varios productos, en lugar de rehacerse en cada
+uno. Encuadrar la solución bajo ese enfoque es la decisión de fondo del
+trabajo, porque desplaza el problema desde elegir una herramienta hacia
+definir las condiciones que gobiernan su uso, que es el plano en el que las
+tres brechas pueden cerrarse para una familia entera de productos y no para un
+proyecto a la vez.
+
+\subsubsection*{Elementos constitutivos y pertinencia del enfoque}
+
+El enfoque exige cuatro elementos constitutivos, y la ausencia de cualquiera
+de ellos impide hablar de una línea de producto \citep{Clements2001}. Lo que
+vuelve pertinente el encuadre no es que los cuatro puedan construirse, sino
+que los cuatro ya estaban presentes en el contexto estudiado de forma
+informal, cada uno con su evidencia en el análisis del problema. La
+Tabla~\ref{tab:constitutivos} enfrenta lo que el enfoque exige con lo que el
+contexto tenía y con lo que la línea construyó en su lugar.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{2.5cm}p{3.9cm}p{4.3cm}p{3.8cm}}
+\toprule
+\textbf{Elemento} & \textbf{Qué exige el enfoque} & \textbf{Cómo estaba en el contexto} & \textbf{Cómo se materializa en la línea} \\
+\midrule
+Alcance declarado & Declaración explícita de qué productos pertenecen a la familia & Una familia sin declarar, cuyos productos comparten propósito y estructura sin que nadie lo haya escrito & El alcance de la familia, con su condición mínima de pertenencia y sus exclusiones \\
+Arquitectura común & Estructura compartida que hace posible que un mismo activo sirva a varios productos & Un patrón que el desarrollador debe dominar antes de ser productivo, transmitido imitando otros proyectos & Domain-Driven Design y arquitectura hexagonal, con una regla de dependencia verificable \\
+Core assets & Activos reutilizables que incluyen arquitectura, contratos y modelos, y no solo código & Un núcleo reconocido de funcionalidades transversales que se repite entre productos y se copia & Las plantillas, los módulos, el \emph{contract package} y el catálogo \\
+Mecanismo de derivación & Procedimiento que produce un producto a partir de los activos y de una selección de características & Copiar un proyecto y ajustarlo, que deriva sin trazabilidad ni vínculo con su origen & La herramienta de línea de comandos, construida en las fases posteriores \\
+\bottomrule
+\end{tabular}
+}
+\caption{Los cuatro elementos constitutivos de una línea de producto, frente a lo que el contexto ya tenía y a lo que la línea construyó}
+\label{tab:constitutivos}
+\end{table}
+
+La tercera columna es la que decide, porque los cuatro elementos existían,
+pero ninguno declarado ni gestionado, y esa es la diferencia que el enfoque
+convierte en ventaja de ingeniería, porque lo que no está declarado no puede
+compartirse de forma deliberada. La cuarta fila lo muestra en su forma más
+clara, porque copiar un proyecto y ajustarlo es lo que la literatura denomina
+\emph{clone-and-own}, una forma legítima de reutilización por su bajo costo
+inicial, cuyo problema característico es la divergencia progresiva, porque
+nada devuelve a las demás copias lo que se corrige en una y el costo crece con
+el número de copias \citep{Dubinsky2013}. Es exactamente lo que el análisis
+del problema encontró en campo, y lo que la primera brecha enuncia como
+capacidad ausente.
+
+De ahí se sigue el papel que le toca al artefacto, porque lo que el encuadre
+aporta no es una herramienta más, sino las condiciones bajo las cuales se
+emplean las que ya existen, y la que las fases siguientes construyen es el
+mecanismo de derivación que esas condiciones exigen. Es además lo que vuelve
+gestionados a los otros tres elementos, porque un alcance declarado y unos
+activos comunes sin un procedimiento que los aplique vuelven a quedar en manos
+de quien copia.
+
+\subsubsection*{Organización general de la línea}
+
+Los cuatro elementos describen qué debe existir, pero no cómo se articulan, y
+para articularlos se adopta el modelo de referencia que cruza el espacio del
+problema con el de la solución, y la ingeniería de dominio con la de
+aplicación \citep{Apel2013}. Del cruce resultan cuatro cuadrantes, donde el
+análisis del dominio declara el alcance de la familia y la variabilidad; la
+implementación del dominio construye los activos comunes y la arquitectura de
+referencia; el análisis de requerimientos de la aplicación es el momento en
+que un desarrollador selecciona características para un producto concreto; y
+la derivación del producto las ensambla. Los dos primeros corresponden a las
+fases 1, 2 y 3 de este trabajo; los dos últimos ocurren cada vez que alguien
+emplea la herramienta.
+
+De los cinco flujos que conectan los cuadrantes, el que más condiciona el
+diseño es el retorno de nuevos requerimientos hacia el dominio, porque es el
+que permite que lo aprendido construyendo corrija el encuadre. El modelo
+supone además un modelo de características formal sobre el cual se ejecuta la
+selección, y este marco no lo define, de modo que la variabilidad de la línea
+queda asignada a la Fase 2, que deberá formalizarla dentro de los límites que
+el alcance de la familia y el catálogo de activos imponen.
+
+\subsubsection*{Alcance de la familia de productos}
+
+Pertenecen a la familia los servicios backend sobre Node.js y TypeScript que
+responden por una sola capacidad de negocio, exponen al menos una API HTTP
+documentada bajo el estándar OpenAPI y consumen servicios corporativos. Quedan
+fuera las aplicaciones frontend, las que no exponen una API HTTP, los scripts
+de propósito único y los servicios construidos sobre otros lenguajes o
+ecosistemas.
+
+Esa exposición es la condición mínima de pertenencia, y de ella depende que
+todos los productos compartan la misma superficie de entrada, que es lo que
+hace viable un activo común y lo que da sentido a la documentación OpenAPI
+como capacidad transversal de la línea. Delimitar el alcance con esta
+precisión lo exige el propio enfoque, porque uno demasiado amplio impide que
+un activo sirva a todos los productos y uno demasiado estrecho no justifica el
+esfuerzo de construir la línea frente al de construir un solo producto
+\citep{Clements2002}.
+
+La condición no fija un modelo de ejecución, porque un producto sin servidor
+propio la cumple igual, y cuántas plantillas tiene la línea lo decide el
+mecanismo de derivación y no el alcance de la familia. Que el marco absorbiera
+ese hallazgo de la construcción sin alterar su condición de pertenencia es la
+primera evidencia del flujo de retorno que el modelo de referencia declara.
+
+\subsubsection*{Desviaciones declaradas respecto del modelo clásico}
+
+El modelo adoptado opera sobre dos asunciones que el contexto no satisface, y
+se declaran como desviaciones explícitas en lugar de forzar el caso dentro de
+un esquema que no lo previó.
+
+La primera es la de productos autónomos, porque el modelo no contempla retorno
+desde el producto derivado, que una vez producido queda fuera del modelo,
+mientras que aquí el proyecto se entrega a un equipo que conserva autonomía
+para modificarlo. La línea no gobierna el producto después de derivado, sino
+que mantiene con él un vínculo que permite propagar cambios sin imponer su
+aceptación.
+
+La segunda es la de derivación por etapas, porque en el modelo la selección de
+características ocurre una sola vez y precede a la derivación, mientras que
+aquí puede repetirse sobre un producto ya derivado, porque una capacidad
+compartida debe poder incorporarse a un proyecto en curso.
+
+Ambas se originan en la misma condición, que es que los productos pertenecen
+a equipos autónomos con repositorios independientes. No son concesiones, sino
+la consecuencia de aplicar el enfoque a un contexto que el modelo clásico no
+previó.
+
+\subsection{Fundamentos adoptados}
+\label{sec:fundamentos-adoptados}
+
+El encuadre anterior exige una arquitectura común y un modelo de dominio que
+delimite y nombre lo que cada producto representa. Ambos se establecieron a
+partir de los tres fundamentos de la Tabla~\ref{tab:fundamentos}, cuyas bases
+conceptuales se presentaron en el marco teórico del Capítulo~\ref{cap:marco}.
+Lo que aquí se fija es su adopción operativa, es decir qué se toma de cada uno,
+para qué, y qué queda deliberadamente fuera.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{3.3cm}p{5.5cm}p{5.9cm}}
+\toprule
+\textbf{Fundamento} & \textbf{Qué aporta al marco} & \textbf{Hasta dónde se adopta} \\
+\midrule
+BIAN & El vocabulario de negocio y la unidad de delimitación de un producto & El Service Landscape como espacio de selección y el metadato de dominio; no gobierna el catálogo de capacidades técnicas \\
+Domain-Driven Design & El modelado del interior del producto & Tres reglas del nivel estratégico y seis patrones tácticos; la relación entre \emph{bounded contexts} de proyectos distintos queda fuera \\
+Arquitectura hexagonal & La separación entre el núcleo y todo lo que no es dominio & Tres principios, de los que se deriva una regla verificable por análisis estático \\
+\bottomrule
+\end{tabular}
+}
+\caption{Fundamentos adoptados y alcance de su adopción}
+\label{tab:fundamentos}
+\end{table}
+
+\subsubsection*{Adopción de BIAN}
+
+Se adopta la versión 14.0 del Service Landscape, y toda referencia a
+\emph{Business Areas}, \emph{Business Domains} o \emph{Service Domains}
+corresponde a esa versión. Declararla no es una formalidad, porque la
+estructura del modelo cambia entre versiones y la 14.0 introdujo
+renombramientos, eliminaciones e incorporaciones, particularmente en el área
+de pagos.
+
+BIAN gobierna tres aspectos del proyecto generado, que son la unidad de
+derivación, el vocabulario con que se nombra lo que el producto representa y
+el metadato de dominio que el producto registra. Igual de relevante es
+delimitar lo que no gobierna, porque el catálogo de módulos agrupa
+capacidades técnicas transversales y el estándar modela capacidades de
+negocio bancario, no infraestructura técnica de aplicaciones. De los treinta
+y ocho \emph{Business Domains} del Service Landscape, nueve corresponden al
+tipo de productos que construye el contexto, y el subconjunto de
+\emph{Service Domains} contenidos en ellos constituye el espacio de selección
+por defecto del mecanismo de derivación.
+
+\paragraph*{Unidad de derivación y criterio de granularidad}
+
+Cada ejecución del mecanismo produce un proyecto que aloja exactamente un
+\emph{bounded context}, correspondiente a un \emph{Service Domain}, y no se
+admite derivar productos que alojen varios. La regla se apoya en el alcance
+mínimo que define el estándar, porque un \emph{Service Domain} es una
+capacidad de negocio discreta cuyo alcance es elemental, de modo que si se
+descompone más, las partes pierden su contexto de negocio y pasan a ser
+utilitarias. La propiedad de no solapamiento aporta la contraparte, porque
+las capacidades que el estándar define no se solapan y la información que
+gobiernan tampoco. Trasladada al contexto, impide que dos proyectos sean
+dueños de la misma información.
+
+\paragraph*{Registro del dominio como metadato}
+
+Todo proyecto derivado registra, como metadato, el \emph{Service Domain} al
+que corresponde y el \emph{Business Domain} que lo contiene. La regla admite
+una excepción y establece una prohibición, de modo que si el producto
+corresponde a una capacidad que no figura en el espacio de selección por
+defecto, se permite declararla fuera de ese subconjunto registrando el
+\emph{Business Domain} que la contiene. Lo que no se admite es omitir el
+metadato, porque sin él la delimitación de dominio queda sin efecto
+verificable y la alineación con el estándar se vuelve meramente declarativa.
+
+\subsubsection*{Adopción de Domain-Driven Design}
+
+Al corresponder cada proyecto a un único \emph{bounded context}, el nivel
+estratégico se reduce a tres reglas, que fijan la correspondencia entre el
+\emph{bounded context} y el \emph{Service Domain}, la obligación de un
+lenguaje ubicuo derivado del estándar y la prohibición de alojar más de un
+contexto por producto. La relación entre \emph{bounded contexts} de proyectos
+distintos queda fuera del marco y se registra como punto de extensión.
+
+En el nivel táctico se adoptan seis patrones, de los cuales cuatro son el
+núcleo mínimo del modelado táctico, que son la entidad, el objeto de valor, el
+agregado y el repositorio; los otros dos, el evento de dominio y el servicio
+de aplicación, se incorporan por decisiones ya tomadas en el marco. Los
+documentos del marco de referencia detallan cada uno y su realización en la
+estructura del proyecto.
+
+El término módulo exige una precisión, porque en este trabajo designa un
+\emph{core asset} del catálogo. El patrón táctico homónimo no se adopta con ese
+nombre, para evitar que un mismo término designe dos cosas distintas.
+
+\subsubsection*{Adopción de la arquitectura hexagonal}
+
+La arquitectura hexagonal aporta la regla que separa el núcleo del producto
+de todo lo que no es dominio. De sus tres principios adoptados se deriva una
+regla verificable que el marco toma como criterio, según la cual el núcleo no
+importa ningún artefacto del exterior. Al construirse los productos en
+TypeScript, esa regla puede comprobarse mediante análisis estático en lugar
+de depender de revisión manual, lo que la convierte en una restricción
+efectiva y no en una recomendación.
+
+La articulación entre Domain-Driven Design y arquitectura hexagonal es
+directa, porque los patrones tácticos describen qué contiene el núcleo, y la
+arquitectura hexagonal describe cómo el núcleo se relaciona con lo que está
+afuera. El repositorio es el punto donde ambos se encuentran, porque es un
+patrón táctico cuya realización concreta vive en el exterior.
+
+\subsubsection*{Aplicación conjunta de los tres fundamentos}
+
+Los tres fundamentos operan de forma conjunta en cada derivación, y la
+Tabla~\ref{tab:derivacion} recorre el camino completo, desde la selección en
+el Service Landscape hasta el esqueleto generado, sobre una capacidad
+concreta.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{3.6cm}p{4.6cm}p{6.5cm}}
+\toprule
+\textbf{Paso} & \textbf{Qué fundamento interviene} & \textbf{Qué produce} \\
+\midrule
+Selección de la capacidad & BIAN, Service Landscape & El \emph{Service Domain} y el \emph{Business Domain} que lo contiene \\
+Delimitación del producto & BIAN y Domain-Driven Design & Un \emph{bounded context} único, con su lenguaje ubicuo \\
+Modelado del núcleo & Domain-Driven Design, nivel táctico & La entidad raíz del agregado, sus objetos de valor, el contrato del repositorio y los eventos \\
+Separación del exterior & Arquitectura hexagonal & Los puertos que el núcleo declara y los adaptadores que los realizan \\
+Derivación del esqueleto & El mecanismo de la Fase 2 & La estructura de carpetas, los nombres y los contratos vacíos \\
+\bottomrule
+\end{tabular}
+}
+\caption{Recorrido de una derivación, desde el estándar hasta el proyecto generado}
+\label{tab:derivacion}
+\end{table}
+
+El resultado sobre un producto de la familia es un núcleo en dos capas, la de
+dominio dentro de la de aplicación, con los adaptadores que lo invocan desde
+fuera por encima y los que él gobierna por debajo. La capacidad del estándar
+no forma parte de esa arquitectura, sino que es lo que determina el contenido
+del núcleo.
+
+Lo que la derivación entrega es el punto de partida de un producto y no el
+producto, porque las reglas de negocio las escribe después el equipo que lo
+recibe, y esa distinción es la que mantiene al artefacto dentro de su
+alcance.
+
+\subsubsection*{Exclusión razonada de ISO 20022}
+
+El estándar ISO 20022 se revisó como posible fundamento del marco y se
+excluyó de forma deliberada. La razón es de naturaleza y no de dificultad, porque
+ISO 20022 es un estándar de mensajería financiera que define modelos de
+negocio y esquemas de mensajes para el intercambio de información entre
+instituciones financieras, mientras que el artefacto de este trabajo no
+produce, transforma ni transporta mensajes financieros, sino estructuras de
+proyecto y componentes técnicos transversales. La relación entre ambos
+estándares delimita el punto de contacto con precisión, porque BIAN
+referencia correspondencias hacia ISO 20022 en la capa de especificación de
+mensajes, y esa capa es exactamente la que el artefacto no produce.
+
+La adopción de ISO 20022 corresponde, por tanto, a la lógica de negocio que
+cada equipo implementa sobre el proyecto derivado, explícitamente fuera del
+alcance de la solución. La exclusión se registra como punto de extensión y no
+como omisión, porque un módulo de dominio que encapsule mensajería ISO 20022
+sería un consumidor legítimo de este marco y no una parte de él.
+
+Esta exclusión constituye una divergencia respecto del objetivo general
+formulado en el anteproyecto, que comprometía la alineación con BIAN e ISO
+20022. Se declara como tal, con su razón, y el Capítulo~\ref{cap:evaluacion}
+la recoge entre las divergencias del proyecto al medir el cumplimiento de los
+objetivos.
+
+\section{Resumen del capítulo}
+
+Este capítulo convirtió una intuición en un problema delimitado y un problema
+en un encuadre. Al abrirlo existía la percepción de que arrancar un proyecto
+cuesta demasiado y de que las funcionalidades transversales se copian; al
+cerrarlo existen quince temas sostenidos por nueve entrevistas, tres
+brechas que ninguna de las ocho soluciones estudiadas cubre, veintidós
+requerimientos verificables y una arquitectura de la familia de productos que
+la herramienta deberá materializar.
+
+Tres decisiones estructurales sostienen el resultado, y la primera es el
+encuadre como línea de producto de software, adoptado no por afinidad
+conceptual sino porque los cuatro elementos que el enfoque exige ya estaban
+presentes de forma informal, incluida la derivación por copia, cuya
+limitación documentada es la que se encontró en campo. La segunda es la
+delimitación de un producto por una capacidad de negocio del estándar, que da
+a la línea una unidad de derivación y un vocabulario que no hay que inventar.
+Y la tercera es que el marco diseña la familia de productos y no la
+herramienta, lo que permitió verificar el encuadre antes de que existiera
+código.
+
+El capítulo dejó además dos límites declarados que el cierre del proyecto
+recoge. La exclusión de ISO 20022 es una divergencia respecto del objetivo
+general, y se declara con su razón en lugar de omitirse. Y las dos
+desviaciones respecto del modelo de referencia clásico, el producto autónomo
+y la derivación por etapas, no son concesiones sino la consecuencia de
+aplicar el enfoque a un contexto de equipos autónomos con repositorios
+independientes.
+
+Lo que queda abierto por construcción es todo el mecanismo, porque el marco
+acota lo que las fases siguientes pueden decidir pero no construye ni un
+activo ni una línea de la herramienta. Con él quedan asignadas tres reglas
+concretas que se definen donde se construyen: la forma que debe tener un
+proyecto válido de la familia, los contratos por los que una capacidad
+compartida se le acopla, y las condiciones que hacen válido a un módulo del
+catálogo. Las dos primeras abren el Capítulo~\ref{cap:generacion}; la tercera
+es del Capítulo~\ref{cap:gestor}.

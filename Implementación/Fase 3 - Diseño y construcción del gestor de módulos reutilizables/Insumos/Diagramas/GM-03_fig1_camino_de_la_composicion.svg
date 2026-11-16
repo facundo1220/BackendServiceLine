@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="376" viewBox="0 0 860 376" font-family="Inter, Segoe UI, Helvetica Neue, Arial, sans-serif">
+<rect width="860" height="376" fill="#ffffff"/>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#323232"/></marker>
+</defs>
+<rect x="32" y="32" width="370" height="108" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="217" y="58" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">1 · Leer el estado</text>
+<text x="217" y="80" font-size="13" fill="#323232" text-anchor="middle">Localiza el producto y su registro</text>
+<text x="217" y="98" font-size="13" fill="#323232" text-anchor="middle">Lee el catálogo y el manifiesto</text>
+<text x="217" y="116" font-size="13" fill="#323232" text-anchor="middle">Resuelve la versión del activo</text>
+<rect x="458" y="32" width="370" height="108" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="643" y="58" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">2 · Comprobar las reglas</text>
+<text x="643" y="80" font-size="13" fill="#323232" text-anchor="middle">Forma del producto y contrato</text>
+<text x="643" y="98" font-size="13" fill="#323232" text-anchor="middle">Puertos, marcas y archivos</text>
+<text x="643" y="116" font-size="13" fill="#323232" text-anchor="middle">Un rechazo deja el producto intacto</text>
+<rect x="32" y="236" width="370" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="217" y="262" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">3 · Producir el plan</text>
+<text x="217" y="284" font-size="13" fill="#323232" text-anchor="middle">Cada cambio con su clase y archivo</text>
+<text x="217" y="302" font-size="13" fill="#323232" text-anchor="middle">Con --dry-run termina acá</text>
+<rect x="458" y="236" width="370" height="108" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="2.6"/>
+<text x="643" y="262" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">4 · Aplicar con respaldo</text>
+<text x="643" y="284" font-size="13" fill="#323232" text-anchor="middle">Copia cada archivo que toca</text>
+<text x="643" y="302" font-size="13" fill="#323232" text-anchor="middle">Si algo falla, restituye entero</text>
+<text x="643" y="320" font-size="13" fill="#323232" text-anchor="middle">Producto compuesto que arranca</text>
+<polyline points="402,86 458,86" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="643,140 643,188 217,188 217,236" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="402,281 458,281" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+</svg>

@@ -1,0 +1,426 @@
+%%==========================================================
+%%  CAPÍTULO 5: DISEÑO Y CONSTRUCCIÓN DEL GESTOR DE MÓDULOS REUTILIZABLES
+%%==========================================================
+\label{cap:gestor}
+
+El Capítulo~\ref{cap:generacion} dejó una herramienta que produce un proyecto
+conforme al marco y un contrato por el que una capacidad compartida puede
+acoplársele. Lo que no existía todavía era esa capacidad, ni la operación que
+la incorpora. Un proyecto generado nace completo el primer día y empieza a
+quedarse corto el segundo, cuando necesita algo que no eligió al derivarse, y
+esta fase construyó lo que resuelve ese segundo día.
+
+Lo que entregó son dos cosas que se validan mutuamente, y la primera son
+módulos reales del catálogo, que es la única forma de comprobar que el
+contrato de integración sirve para algo. La segunda son las operaciones que
+los incorporan, los consultan, los actualizan y los retiran sobre un proyecto
+que ya existe y que su equipo ya modificó. La condición de llegada se formuló
+antes de construir, y exige que un producto derivado al que se le incorpora un
+módulo siga arrancando sin edición manual, supere su propia verificación,
+conserve el código que su equipo escribió y declare qué módulo tiene y en qué
+versión. El detalle de la construcción se conserva en los documentos de la
+Fase 3, disponibles en el repositorio del proyecto.
+
+\section{Hitos de la construcción}
+\label{sec:hitos-fase-3}
+
+La fase se ejecutó en cuatro hitos, y el orden entre ellos importa por la
+misma razón que en la fase anterior, porque un módulo real contra la
+definición encuentra lo que ninguna lectura de la definición encuentra. Por
+eso el activo componible y su prueba contra un caso real preceden a las
+operaciones que lo manejan, y la evidencia del circuito completo cierra la
+fase. La Tabla~\ref{tab:hitos-gestor} recoge qué dejó cada hito y cómo quedó
+comprobado.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{3.1cm}p{5.9cm}p{5.4cm}}
+\toprule
+\textbf{Hito} & \textbf{Qué dejó construido} & \textbf{Cómo quedó comprobado} \\
+\midrule
+Qué es un módulo & El manifiesto con que un módulo se describe a sí mismo, la frontera entre lo empaquetado y lo generado, y las condiciones que lo hacen válido & La herramienta incorpora un módulo sin conocer su nombre, leyendo solo lo que el manifiesto declara \\
+El primer módulo & La persistencia relacional, con su puerto en el contrato y su adaptador en el producto & El producto compuesto guarda un dato, se reinicia y lo vuelve a leer \\
+Las operaciones & Incorporar, consultar, actualizar y retirar, sobre el punto de extensión de la fase anterior & El núcleo creció sin que ninguna operación anterior cambiara \\
+El segundo módulo & La observabilidad, de otra naturaleza que la primera & Entró sin cambiar el núcleo, el esquema del manifiesto ni la operación \\
+\bottomrule
+\end{tabular}
+}
+\caption{Hitos de la construcción del gestor de módulos}
+\label{tab:hitos-gestor}
+\end{table}
+
+La frontera con la fase siguiente es la que separa construir de medir. Esta
+fase comprueba que el mecanismo funciona; si funciona en manos de un equipo
+que no lo construyó, y cuánto esfuerzo ahorra, es lo que mide el
+Capítulo~\ref{cap:evaluacion}.
+
+\section{Las capacidades transversales y la que se construyó}
+\label{sec:capacidades-transversales}
+
+El inventario de capacidades partió del análisis cualitativo del contexto y
+no de una taxonomía externa. Aquí hay una desviación respecto del
+anteproyecto que debe declararse, y es que aquel documento pedía categorizar
+las capacidades transversales tomando como referencia los dominios funcionales
+del estándar de negocio, y no se hizo, porque ese estándar modela capacidades
+bancarias y no infraestructura técnica de aplicaciones. Categorizar un
+registro de eventos contra un dominio de negocio habría producido una
+clasificación sin poder explicativo.
+
+De las capacidades inventariadas se eligió una, con criterios escritos antes
+de aplicarlos: que fuera verificable por comportamiento observable, que no
+dependiera de infraestructura externa al entorno de verificación, que
+ejercitara el contrato de composición en su forma completa, que su ausencia
+fuera visible en el producto, y que no exigiera decisiones de seguridad que
+el contexto no hubiera fijado.
+
+La elegida fue la persistencia relacional del producto, y la
+elección corrigió una afirmación anterior del propio proyecto, que daba por
+decidido que el módulo comprometido sería el de cifrado y manejo de tokens.
+El criterio descarta el cifrado precisamente por el último punto, ya que
+exige fijar antes decisiones de seguridad, como la gestión de claves, su
+rotación y su custodia, que pertenecen a la organización y no a una línea de
+producto.
+
+El inventario fijó además un orden de crecimiento, y la primera capacidad de
+ese orden se construyó después como segundo módulo
+(sección~\ref{sec:segundo-modulo}). Esa segunda construcción es la que
+permite afirmar algo que con un solo módulo no era afirmable.
+
+\section{Qué es un módulo}
+\label{sec:anatomia-modulo}
+
+Un módulo de esta línea es un paquete publicado que implementa un puerto
+técnico del \emph{contract package} y que se describe a sí mismo. La
+herramienta no conoce ningún módulo por su nombre, sino que lee un manifiesto
+que viaja dentro del paquete y que declara qué puerto provee, qué
+configuración necesita, qué archivos aporta al producto y en qué puntos de
+este hay que insertar su cableado.
+
+La frontera entre lo que viaja en el paquete y lo que se escribe dentro del
+producto tiene una consecuencia que vale más que la elegancia, porque
+incorporar un módulo nuevo al catálogo no exige publicar una versión nueva de
+la herramienta. Sin ella, cada módulo habría requerido código propio en el
+generador, y el catálogo habría quedado acoplado a su versión.
+
+\subsection{La frontera entre lo empaquetado y lo generado}
+
+La distinción que gobierna todo el mecanismo es cuál de las dos partes de un
+módulo vive dónde. La \emph{implementación} viaja empaquetada y versionada en
+el módulo, y es código que el equipo del producto no edita y que una
+actualización reemplaza por completo. El \emph{cableado} se genera dentro del
+producto, y comprende el adaptador que ata el puerto a la implementación, la
+configuración que el producto valida junto con la suya, y el registro de qué
+quedó incorporado.
+
+De ahí se sigue la regla más restrictiva de la fase: un módulo aporta
+plantillas, nunca clases base. Si el módulo exportara una clase de
+la que el producto heredara, el código del producto quedaría atado a la forma
+interna del módulo y una actualización podría romperlo sin tocarlo. Lo
+generado es del equipo que lo recibe, que es lo que RNF-02 exige.
+
+Para que el cableado pueda entrar, y sobre todo para que pueda reemplazarse
+después, el producto trae puntos de inserción declarados: unos son marcas de
+una sola línea donde se agrega algo, y otros son regiones delimitadas cuyo
+contenido se sustituye entero. La diferencia importa, porque lo que se
+inserta sin delimitar no se puede reemplazar, y eso apareció al construir la
+actualización y no al diseñar la composición.
+
+Un módulo escribe también en la documentación del producto, en una región que
+él declara. La razón es que el producto dice de sí mismo cosas que dejan de
+ser ciertas al componerlo. Un producto que advierte que pierde sus datos al
+detenerse deja de perderlos cuando entra el módulo de persistencia, y esa
+frase tiene que corregirse por construcción y no por memoria de quien compone.
+
+\subsection{A qué forma de producto sirve}
+
+El manifiesto declara además a qué forma de producto sirve el módulo, y
+mientras la línea tuvo una sola plantilla, esa declaración habría sido
+redundante; cuando el almacén admitió una segunda forma dejó de serlo, porque
+el cableado de un módulo aterriza en puntos de inserción concretos y una
+forma que no los tenga lo recibiría roto.
+
+La comparación se hace contra el registro del producto y nunca contra la
+plantilla que lo derivó, porque esa plantilla puede no estar instalada, y se
+hace por identificador y versión entera y nunca por rango, ya que una versión
+de forma se mueve exactamente cuando un punto se mueve o desaparece. Ser
+indulgente ahí convertiría un rechazo que nombra la causa en un producto roto
+sin aviso.
+
+Las dos declaraciones que deciden una incorporación caben en cinco líneas del
+manifiesto, y son el puerto que el módulo provee y la forma a la que sirve.
+Todo lo que la herramienta necesita saber de un módulo para aceptarlo o
+rechazarlo está ahí, y nada de ello está en la herramienta.
+
+El mensaje del rechazo nombra las dos formas, la que el módulo sirve y la que
+el producto tiene, y explica que la incompatibilidad no es cuestión de
+esfuerzo sino de que el cableado no tendría dónde aterrizar. El producto queda
+sin tocar.
+
+\section{El módulo de persistencia como caso de referencia}
+\label{sec:modulo-persistencia}
+
+El módulo se construyó sobre el motor embebido que la plataforma de ejecución
+ya trae, sin dependencias de ejecución nuevas. Esa restricción no es
+estética, porque una dependencia de ejecución en un entorno regulado abre una
+auditoría, y el objetivo era probar el mecanismo de composición y no la
+elección de un motor.
+
+La persistencia es además el caso que obliga a ejercitar a la vez las dos
+clases de puerto que el Capítulo~\ref{cap:generacion} definió. El repositorio
+del agregado es un puerto de dominio, que el producto declara y realiza. El
+acceso al motor es un puerto técnico, que el \emph{contract package} declara y
+el módulo realiza. El adaptador del repositorio, que vive en el producto,
+consume el puerto técnico del módulo, y ninguna dependencia une directamente
+al producto con el módulo.
+
+El módulo aporta la capacidad técnica pero no una base de adaptador que el
+producto extienda, porque la herencia entre un activo del catálogo y el
+código del producto crearía un acoplamiento que ninguna de las dos partes
+controla. La consecuencia es que el dominio no conoce el motor de
+persistencia, y cambiarlo no altera ninguna declaración de la capa de
+dominio. De aquí se desprende una regla adicional de validez, según la cual
+un producto no puede tener puertos de dominio sin adaptador, y es la que
+después impide retirar un módulo que dejaría al producto incompleto.
+
+\paragraph*{Un hallazgo del contenedor de inyección}
+
+Un módulo no alcanzaba el puerto de configuración del producto, porque el
+contenedor de dependencias resuelve dentro del módulo que pide. La solución
+fue que el producto exponga los puertos de la línea en un módulo global
+propio, separado de su raíz de composición. Es una consecuencia del marco que
+ninguna lectura del marco habría anticipado, porque apareció al ejecutar, y es
+el tipo de hallazgo que justifica construir un módulo real en lugar de
+especificar cómo sería.
+
+\section{Las cuatro operaciones del gestor}
+\label{sec:gestor-modulos}
+
+Las operaciones del gestor se montan sobre el punto de extensión que la fase
+anterior dejó, y ninguna lo modifica. El núcleo sí creció, y la distinción
+entre crecer y modificarse es la que mantuvo la frontera entre las dos fases.
+
+\subsection{Incorporar un módulo a un proyecto existente}
+\label{sec:composicion}
+
+La composición resuelve el módulo contra el catálogo, lo obtiene del
+registro, lee su manifiesto y convierte lo que el manifiesto declara en un
+plan de cambios sobre un producto que ya existe. El plan sigue siendo el
+mismo dato inspeccionable de la fase anterior; lo que cambió es que ahora
+puede escribir sobre un destino que no está vacío.
+
+Escribir sobre un proyecto ajeno exigió tres cosas que generar no
+necesitaba: un modo que admite un destino existente, dos clases de cambio
+—reescribir un archivo completo y reemplazar el contenido de una región
+delimitada— y respaldo de todo lo que se toca antes de tocarlo. El diseño
+original del plan de cambios ya había anticipado la necesidad, lo que
+permitió extenderlo en lugar de reemplazarlo.
+
+\paragraph*{Lo que la operación se niega a hacer}
+
+Antes de producir un solo cambio, la operación comprueba nueve reglas sobre
+el producto y sobre el módulo. Rechaza cuando el módulo no sirve a la forma
+del producto, cuando el destino no es un producto derivado, cuando el activo
+no está en el catálogo o no está activo, cuando el módulo ya está
+incorporado, cuando otro módulo ya provee el mismo puerto, cuando las
+versiones de contrato no coinciden, cuando falta un punto de inserción que el
+cableado necesita, y cuando un archivo que el módulo genera ya existe en el
+producto.
+
+Que las nueve se comprueben antes y no durante la escritura es lo que hace
+que un rechazo deje el producto exactamente como estaba, y esa propiedad se
+verifica. Un rechazo que dejara el producto a medio modificar sería peor que
+no tener la operación. La razón de rechazar en lugar de intentar arreglar es
+que cada regla describe un producto que la herramienta no sabe componer sin
+suponer algo sobre código que no escribió, y suponer en código ajeno es el
+modo más caro de equivocarse, porque el daño aparece después, en un producto
+que ya nadie relaciona con el comando que lo tocó.
+
+\paragraph*{Lo que apareció al ejecutar}
+
+Los tres defectos de la Tabla~\ref{tab:defectos-composicion} no aparecieron
+al diseñar la composición sino al correrla, y son la parte más instructiva de
+la fase.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{4.9cm}p{9.8cm}}
+\toprule
+\textbf{Defecto} & \textbf{Qué lo causaba} \\
+\midrule
+Un archivo tocado dos veces perdía el primer cambio & El plan aplicaba cada cambio sobre el archivo original y no sobre el resultado del anterior \\
+Un marcador se confundía con su propia mención en la documentación del código & La búsqueda del punto de inserción no distinguía la marca de un comentario que la nombra \\
+El producto compuesto compilaba pero no pasaba su análisis estático & Una importación quedaba sin uso al reemplazar una región \\
+\bottomrule
+\end{tabular}
+}
+\caption{Defectos detectados al ejecutar la composición}
+\label{tab:defectos-composicion}
+\end{table}
+
+El tercero es el que mejor justifica el circuito de verificación completo,
+porque un producto compuesto que compila pero no pasa su análisis estático es un
+producto que su equipo no puede entregar, y ninguna prueba unitaria de la
+herramienta lo habría mostrado.
+
+\subsection{Consultar, actualizar y retirar}
+\label{sec:consulta-actualizacion}
+
+La consulta responde qué ofrece el catálogo, qué tiene incorporado el
+producto, en qué versión, cuál quedó por detrás de la disponible y qué archivo
+generado cambió el equipo. Es lo que permite decidir si actualizar antes de
+intentarlo, y dice además lo que el producto \emph{tiene} y no lo que podría
+tener, que es una corrección posterior. Antes declaraba disponible un módulo
+que la composición habría rechazado, porque no comprobaba la forma del
+producto.
+
+La actualización mueve un módulo incorporado a una versión posterior sin
+intervención manual, y su problema real es qué hacer con lo que el equipo
+cambió. La respuesta fue comparar una huella del archivo generado contra la
+que el registro guardó: si coinciden, el archivo se reemplaza; si no, se
+preserva y la herramienta lo dice. No se fusiona nada, porque fusionar
+exigiría que la herramienta decidiera sobre código que no escribió, y la
+decisión de informar en lugar de resolver es lo que mantiene el control en el
+equipo. La actualización comprueba además tres de las nueve reglas de la
+composición, que al principio no repetía, de modo que un cambio de versión
+podía mover un módulo a una versión construida contra otra mayor del contrato,
+o contra otra forma de producto, sin que nadie lo mirara.
+
+A las tres operaciones se sumó después una cuarta, y es la única pieza del
+artefacto que ningún requerimiento pide. Se construyó por decisión
+de alcance del autor, declarada como tal, con el argumento de que una
+decisión que no se puede deshacer no es una decisión, porque un equipo que no
+puede retirar un módulo no lo incorpora para probarlo. La operación lee
+únicamente el registro del producto, restaura la región que el módulo había
+reemplazado y conserva lo que el equipo editó; y rechaza antes de tocar nada
+si al retirarlo un puerto de dominio quedaría sin adaptador. Queda un límite
+declarado, porque un archivo generado que el equipo modificó se conserva por
+la misma razón que lo conserva la actualización, y ese archivo sigue
+importando el módulo que acaba de salir. La herramienta lo dice en lugar de
+corregirlo.
+
+\section{El segundo módulo del catálogo}
+\label{sec:segundo-modulo}
+
+Un módulo construido demuestra que el mecanismo funciona para ese módulo, pero
+no que sea general, porque con un solo caso no hay forma de distinguir un
+contrato de composición de una solución escrita para él. El segundo módulo es
+la evidencia de esa diferencia, y por eso se eligió de otra naturaleza que el
+primero.
+
+La capacidad construida fue la observabilidad, que era la primera
+del orden de crecimiento declarado en el inventario. Donde el primer módulo
+persiste datos, este los \emph{exporta}, entregando a un colector externo las
+entradas del registro, el tramo de traza de cada petición y su duración, en
+un protocolo abierto de telemetría y sin dependencias de ejecución nuevas.
+Quedó fuera de su alcance exponer un endpoint para que un sistema externo
+recolecte métricas, y la razón es del marco y no del módulo, porque un módulo
+aporta adaptadores de salida y un endpoint es superficie de entrada.
+
+\paragraph*{Qué quedó probado}
+
+Un módulo de otra naturaleza entró sin cambiar el núcleo de la herramienta, ni
+el esquema del manifiesto, ni la operación de composición. Lo único que creció
+fue el catálogo, con una entrada, que es la afirmación que el primer módulo no
+podía sostener.
+
+El contrato ganó además un puerto con una propiedad que ninguno anterior
+tenía, porque es el único que ningún adaptador de la plantilla
+satisface. El producto reporta sus señales exactamente igual tenga o no el
+módulo incorporado, y lo inyecta de forma opcional, de modo que incorporar el
+módulo no cambia una línea del producto. La plantilla tampoco reemplaza su
+registro de eventos cuando el módulo está presente, porque el asiento es del
+producto, sino que entrega al módulo la misma entrada que ya escribió.
+
+\paragraph*{Dos hallazgos que solo aparecen al ejecutar}
+
+El primero es una regla del marco que nadie había enunciado, y es que un
+módulo no puede recibir el puerto al que la plantilla le reporta. El adaptador
+pedía el puerto de registro de eventos para escribir sus propias trazas, lo
+que cerró un ciclo con el registro del producto; el resultado fue que el
+producto arrancó, atendió peticiones y \emph{no exportó nada, en silencio},
+que es la peor forma de fallar. La corrección dejó una prueba de regresión en
+la plantilla, porque una regla cuya violación no se comprueba no está
+verificada sino escrita.
+
+El segundo corrigió una afirmación del propio marco, que se sostenía que una
+versión menor del contrato llega a los consumidores sin intervención, y en el
+tramo de versiones anterior a la primera estable eso es falso, porque el
+rango que un paquete declara no acepta la menor siguiente. La consecuencia
+fue que el primer módulo tuvo que republicarse sin un solo cambio de código.
+Es exactamente el costo que el marco había anticipado al versionar el
+contrato como una unidad, apareciendo por primera vez en ejecución.
+
+\section{Verificación y conformidad}
+\label{sec:verificacion-composicion}
+
+La verificación de esta fase no podía ser una suite de pruebas unitarias. Lo
+que había que comprobar es un circuito que atraviesa varias herramientas y
+dos procesos: derivar un producto, incorporarle el módulo, verificar que el
+producto sigue pasando su propia verificación, arrancarlo, almacenar un dato,
+detener el proceso, volver a arrancarlo y leer el dato de vuelta. Eso se
+construyó como un circuito automatizado que corre en la puerta de
+verificación de la línea.
+
+El circuito comprueba además cada rechazo, dejando el producto idéntico en
+todos ellos, la actualización preservando el archivo que el equipo modificó,
+y el producto volviendo a ser conforme cuando se le retira el último módulo.
+Incorpora el mismo módulo a dos productos distintos, con agregados distintos,
+y comprueba que el cableado se nombra por el agregado de cada uno, que es la
+evidencia de que un activo se comparte entre proyectos sin acoplarlos. Y
+porque el segundo producto se compone después de actualizar el primero, los
+dos quedan con versiones distintas del mismo módulo a la vez, que es el
+criterio literal de RNF-06.
+
+La evidencia se cita en los documentos de la fase con su fecha y con el
+comando que la reproduce; este capítulo no la reproduce, porque una
+transcripción de salidas en la tesis queda desactualizada en la primera
+versión publicada.
+
+El criterio de la fase anterior se aplicó a todo lo que esta agregó, y dice
+que una regla cuya violación no se haya comprobado no está verificada. Cada regla
+nueva se rompió a propósito, se comprobó que el circuito fallara con su
+propio mensaje, y se restauró.
+
+\section{Resumen del capítulo}
+
+Esta fase cerró el artefacto, de modo que al terminar existe una herramienta
+que genera un proyecto conforme al marco, le incorpora una capacidad
+transversal sobre un proyecto ya en curso, informa de su estado, la actualiza
+preservando lo que su equipo escribió y la retira si hace falta.
+
+Tres decisiones explican el resultado, y la primera es que el módulo se
+describe a sí mismo, lo que desacopla el catálogo de la versión de la
+herramienta y hace que incorporar un módulo nuevo no sea un cambio de código.
+La segunda es la frontera entre la implementación empaquetada y el cableado
+generado, con la regla de que un módulo aporta plantillas y nunca clases
+base, que es lo que hace que lo generado sea del equipo y que una
+actualización no pueda romper código que no reemplaza. La tercera es que la
+actualización informa en lugar de fusionar, lo que mantiene en el equipo toda
+decisión sobre código que la herramienta no escribió.
+
+La fase dejó además una lección metodológica que ninguna lectura del marco
+habría producido, porque varias de sus decisiones corrigen defectos que
+aparecieron al \emph{ejecutar} y no al diseñar. El más incómodo y el más útil
+lo dio el segundo módulo, donde un adaptador pedía el puerto de registro de
+eventos al que la propia plantilla le reporta, cerró un ciclo, y el producto
+arrancó,
+atendió peticiones y no exportó nada en silencio. Un fallo silencioso es el
+que ninguna lectura del marco produce y ninguna prueba del módulo aislado
+detecta, y solo apareció al componer el módulo en un producto real y mirar
+qué salía por el otro lado.
+
+Ese segundo módulo es también lo que convierte una afirmación en evidencia, porque
+con un módulo construido, el mecanismo funciona para ese módulo; con uno de
+otra naturaleza, que exporta en lugar de persistir y que entró sin cambiar el
+núcleo, ni el esquema del manifiesto, ni la operación de composición, lo que
+queda probado es el mecanismo. Es la misma clase de evidencia que la segunda
+plantilla aporta del lado de la derivación, y las dos juntas son lo que
+permite hablar de una línea de productos y no de un generador con un ejemplo.
+
+Lo que queda no es construcción sino medición, es decir cuánto del esfuerzo de
+configuración inicial se reduce realmente, si la composición funciona en
+manos de un equipo que no construyó la herramienta, y si un proyecto derivado
+permite empezar a escribir lógica de negocio antes que el proceso actual. Es
+el objeto del Capítulo~\ref{cap:evaluacion}.

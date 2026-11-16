@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="660" viewBox="0 0 820 660" font-family="Inter, Segoe UI, Helvetica Neue, Arial, sans-serif">
+<rect width="820" height="660" fill="#ffffff"/>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#323232"/></marker>
+</defs>
+<rect x="32" y="32" width="500" height="304" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="282" y="58" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">bsl-assets</text>
+<rect x="56" y="78" width="215" height="108" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="163.5" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Contrato</text>
+<text x="163.5" y="126" font-size="12.5" font-family="ui-monospace, Menlo, monospace" fill="#323232" text-anchor="middle">@bsl/contracts</text>
+<text x="163.5" y="144" font-size="13" fill="#323232" text-anchor="middle">Puertos que producto y</text>
+<text x="163.5" y="162" font-size="13" fill="#323232" text-anchor="middle">módulo comparten</text>
+<rect x="293" y="78" width="215" height="108" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="400.5" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Plantillas</text>
+<text x="400.5" y="126" font-size="12.5" font-family="ui-monospace, Menlo, monospace" fill="#323232" text-anchor="middle">packages/templates/</text>
+<text x="400.5" y="144" font-size="13" fill="#323232" text-anchor="middle">Cada una deriva una</text>
+<text x="400.5" y="162" font-size="13" fill="#323232" text-anchor="middle">forma de producto</text>
+<rect x="56" y="204" width="215" height="108" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="163.5" y="230" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Módulos</text>
+<text x="163.5" y="252" font-size="12.5" font-family="ui-monospace, Menlo, monospace" fill="#323232" text-anchor="middle">packages/modules/</text>
+<text x="163.5" y="270" font-size="13" fill="#323232" text-anchor="middle">Capacidad transversal que</text>
+<text x="163.5" y="288" font-size="13" fill="#323232" text-anchor="middle">un producto incorpora</text>
+<rect x="293" y="204" width="215" height="108" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="400.5" y="230" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Herramienta</text>
+<text x="400.5" y="252" font-size="12.5" font-family="ui-monospace, Menlo, monospace" fill="#323232" text-anchor="middle">@bsl/cli</text>
+<text x="400.5" y="270" font-size="13" fill="#323232" text-anchor="middle">Deriva, compone y</text>
+<text x="400.5" y="288" font-size="13" fill="#323232" text-anchor="middle">consulta el catálogo</text>
+<rect x="554" y="32" width="234" height="178" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="671" y="58" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">bsl-catalog</text>
+<rect x="578" y="78" width="186" height="108" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="671" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Manifiesto</text>
+<text x="671" y="126" font-size="12.5" font-family="ui-monospace, Menlo, monospace" fill="#323232" text-anchor="middle">@bsl/catalog</text>
+<text x="671" y="144" font-size="13" fill="#323232" text-anchor="middle">Qué activos existen</text>
+<text x="671" y="162" font-size="13" fill="#323232" text-anchor="middle">y en qué estado</text>
+<rect x="32" y="392" width="756" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="410" y="418" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Registro de paquetes privado</text>
+<text x="410" y="440" font-size="13" fill="#323232" text-anchor="middle">Sirve cada activo publicado,</text>
+<text x="410" y="458" font-size="13" fill="#323232" text-anchor="middle">versionado y con su responsable</text>
+<rect x="32" y="538" width="756" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="410" y="564" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Producto derivado</text>
+<text x="410" y="586" font-size="13" fill="#323232" text-anchor="middle">Instala el contrato y</text>
+<text x="410" y="604" font-size="13" fill="#323232" text-anchor="middle">los módulos que incorpora</text>
+<polyline points="282,336 282,392" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="253.7" y="353" width="56.7" height="22" fill="#ffffff" stroke="none"/>
+<text x="282" y="369" font-size="13" fill="#323232" text-anchor="middle">publica</text>
+<polyline points="671,210 671,392" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="642.6" y="353" width="56.7" height="22" fill="#ffffff" stroke="none"/>
+<text x="671" y="369" font-size="13" fill="#323232" text-anchor="middle">publica</text>
+<polyline points="410,482 410,538" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="345.1" y="499" width="129.9" height="22" fill="#ffffff" stroke="none"/>
+<text x="410" y="515" font-size="13" fill="#323232" text-anchor="middle">entrega los activos</text>
+</svg>

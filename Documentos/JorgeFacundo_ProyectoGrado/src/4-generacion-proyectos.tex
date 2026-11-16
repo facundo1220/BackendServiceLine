@@ -1,0 +1,812 @@
+%%==========================================================
+%%  CAPÍTULO 4: DISEÑO Y CONSTRUCCIÓN DEL MECANISMO DE GENERACIÓN DE PROYECTOS
+%%==========================================================
+\label{cap:generacion}
+
+El Capítulo~\ref{cap:fundamentacion} encuadró la solución como línea de
+producto de software y fijó los fundamentos sobre los que se apoya. Un
+encuadre, sin embargo, no reduce por sí solo el esfuerzo de iniciar un
+proyecto; lo reduce un mecanismo que lo aplique sin intervención manual. Esta
+fase construyó ese mecanismo, y con él las reglas concretas que el marco dejó
+asignadas, que son qué forma tiene un proyecto válido de la familia y por qué
+contratos se le acopla una capacidad compartida.
+
+Lo que entregó es una herramienta de línea de comandos instalable que, a
+partir de los activos de la línea y de una selección de características,
+produce un proyecto backend conforme al marco. La condición de llegada se
+formuló antes de construir y es verificable, porque exige un producto derivado
+que arranca sin que nadie edite un archivo, que supera su propio análisis
+estático con la regla de dependencia activa como error, y que declara con qué
+versión de cada activo fue producido. El detalle de la construcción, con sus
+decisiones intermedias y la evidencia de cada verificación, se conserva en los
+documentos de la Fase 2, disponibles en el repositorio del proyecto.
+
+\section{Hitos de la construcción}
+\label{sec:hitos-fase-2}
+
+La fase se ejecutó en cinco hitos, y el orden entre ellos es en sí mismo una
+decisión, porque los que construyen los activos van antes que el que construye
+el generador. Todo lo que un activo contiene puede verificarse a mano mientras
+no exista todavía ningún generador, de modo que invertir el orden habría
+obligado a descubrir un error de la estructura cuando ya existía una
+herramienta edificada alrededor de ella. La Tabla~\ref{tab:hitos-generacion}
+recoge qué dejó cada hito y cómo quedó comprobado.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{2.9cm}p{6.1cm}p{5.4cm}}
+\toprule
+\textbf{Hito} & \textbf{Qué dejó construido} & \textbf{Cómo quedó comprobado} \\
+\midrule
+La forma del producto & Las capas, la regla de dependencia, la frontera del contrato externo y los contratos de integración de la línea & El análisis estático falla nombrando la regla cuando se introduce una importación prohibida \\
+La plantilla base & Un proyecto ejecutable con el entorno de trabajo configurado y la documentación de API automática & Arranca sin que nadie edite un archivo y supera su propia verificación \\
+El catálogo & El manifiesto declarativo, el modelo de gobierno y la distribución por el registro de la organización & Se publica desde su repositorio y se consume en ejecución, sin plataforma propia \\
+La herramienta & El núcleo común con sus seis puertos, el punto de extensión y la operación de derivación & La suite corre sin tocar disco, red ni terminal, con dobles de cada puerto \\
+El almacén de plantillas & Una plantilla que se describe a sí misma, el motor de gramática cerrada y la forma del producto como contrato & Una segunda plantilla, de otro modelo de ejecución, entró sin que cambiara una línea de la herramienta \\
+\bottomrule
+\end{tabular}
+}
+\caption{Hitos de la construcción del mecanismo de generación}
+\label{tab:hitos-generacion}
+\end{table}
+
+El quinto hito no estaba previsto al abrir la fase, y se abrió al comprobar que
+el alcance comprometía un almacén de plantillas, en plural, y que la línea
+tenía una sola plantilla sin lugar donde poner una segunda; la
+sección~\ref{sec:almacen} narra qué obligó a revisar y qué quedó más firme
+que antes.
+
+\subsection{Alcance de la fase}
+\label{sec:alcance-fase-2}
+
+La frontera con la fase siguiente no es temporal sino funcional, y esa
+distinción evita el riesgo principal del diseño, porque ambas fases construyen
+la misma herramienta. Lo que toda operación comparte se construye aquí, y lo que
+es propio de una operación se construye en la fase que la introduce. En
+particular, el punto de extensión por el que se agregan operaciones nuevas
+tiene que existir antes de que la Fase 3 agregue las suyas; de lo contrario
+esa fase rehace la herramienta en lugar de ampliarla. La
+Tabla~\ref{tab:alcance-fase-2} recoge lo que queda fuera y por qué.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{6.2cm}p{8.8cm}}
+\toprule
+\textbf{Queda fuera} & \textbf{Razón} \\
+\midrule
+Incorporación de módulos a un producto & El marco trata generar y componer como operaciones distintas sobre el mismo mecanismo \\
+Construcción de módulos del catálogo & La composición se valida en la fase donde el módulo tiene función \\
+Actualización sobre productos existentes & Requiere más de una versión publicada de un activo consumido \\
+Despliegue e infraestructura & Excluidos en la especificación de requerimientos \\
+\bottomrule
+\end{tabular}
+}
+\caption{Alcance diferido de la fase}
+\label{tab:alcance-fase-2}
+\end{table}
+
+Todo lo diferido se registra como punto de extensión y no como limitación de
+la solución, que es la diferencia entre una frontera decidida y una carencia.
+
+\section{La forma de un producto de la familia}
+\label{sec:organizacion-codigo}
+
+Los fundamentos adoptados establecen qué contiene el núcleo de un producto y
+cómo se relaciona con el exterior, pero no dónde reside físicamente cada
+elemento. Eso lo fijó la línea antes que ninguna otra cosa, porque sin una
+forma declarada no hay nada que derivar.
+
+El proyecto se organiza primero por capa y, dentro de la capa de dominio, por
+agregado.
+
+\subsection{Las reglas de dependencia, y por qué son verificables}
+
+Las dependencias entre capas admiten una sola dirección, porque la
+infraestructura puede depender de la aplicación y del dominio; la aplicación,
+únicamente del dominio; y el dominio, de ninguna de las dos. La restricción no
+alcanza a dos elementos, que son el punto de composición, donde se asocian los
+puertos con sus adaptadores, y el contrato de la línea, que solo declara
+tipos.
+
+De ahí la regla que la línea adopta como criterio: ningún elemento de dominio
+importa un elemento de aplicación o de infraestructura. El dominio no conoce
+el framework, el motor de persistencia ni el protocolo de transporte.
+
+Lo que convierte esa regla en una restricción efectiva no es enunciarla sino
+cómo se comprueba. Se verifica por análisis estático sobre las rutas de
+importación, no por revisión manual, y la violación se reporta como error y
+no como advertencia, de modo que un proyecto que la incumpla no supera su
+verificación. Una regla que solo advierte no restringe.
+
+Las convenciones de nomenclatura que acompañan a esta estructura, con el
+sufijo que corresponde a cada patrón táctico y la forma de derivar un nombre
+desde el estándar, se recogen en los documentos de la Fase 2.
+
+\subsection{La frontera del contrato externo y la documentación de API}
+
+Los tipos que un adaptador de entrada expone al exterior son distintos de los
+objetos de dominio, y el adaptador traduce explícitamente entre unos y otros,
+porque son dos contratos con ciclos de vida independientes. El objeto de
+dominio cambia cuando cambian las reglas del negocio; el tipo expuesto, solo
+cuando cambia el acuerdo con quienes consumen el servicio. Si el adaptador
+expusiera el objeto de dominio, cualquier reorganización interna se
+convertiría en un cambio incompatible para los consumidores.
+
+Esa separación tiene una consecuencia aprovechable que cierra un
+requerimiento, porque los tipos expuestos, al ser explícitos, son la fuente
+desde la cual se deriva la documentación de API del producto, porque el
+documento se arma con los esquemas que el producto ya usa para validar sus
+peticiones y respuestas, y no con una declaración paralela. Es lo que impide
+que la documentación y el comportamiento se separen, porque no hay dos fuentes
+que mantener sincronizadas sino una. El documento lleva además, para cada
+operación, el identificador y el grupo que el estándar le da, que es lo único
+que permite leerlo contra el publicado cuando la forma de las rutas del
+producto puede variar.
+
+La interfaz de exploración se decidió dos veces, y la segunda decisión no
+contradijo las razones de la primera. Al construir el documento se descartó un
+visor del tipo \emph{Swagger UI}, porque exigiría una dependencia de ejecución
+en todo producto o un script traído de internet, y ninguna de las dos es
+admisible en el entorno al que la línea sirve. Lo que esa decisión dejaba a
+cada equipo, la línea lo resolvió después una sola vez, de modo que el
+producto sirve una ruta que renderiza el mismo documento con el visor cargado
+de la copia instalada con el producto y nunca de internet, con la dependencia
+declarada como de desarrollo. Así no cambia lo que un servicio desplegado
+carga, la auditoría de dependencias de ejecución sigue dando el mismo
+resultado, y una variable de entorno decide si la ruta existe, apagada por
+defecto en producción.
+
+\section{Puertos y contratos de integración}
+\label{sec:puertos-contratos}
+
+La estructura admite que la capa de aplicación dependa de contratos de
+puerto, pero no dice qué son ni quién es su dueño. Resolverlo es la condición
+de todo el mecanismo de composición, porque de ahí depende cómo un activo
+reutilizable se acopla a un producto sin romper el desacoplamiento que la
+regla de dependencia establece. Es también el punto donde la arquitectura
+hexagonal se sostiene o se vuelve nominal, porque si el módulo declarara el
+puerto, el producto acabaría dependiendo del módulo y la dirección quedaría
+invertida en la práctica, aunque la definición afirmara lo contrario.
+
+\subsection{El contract package}
+
+Un módulo debe poder servir a más de un producto, y para ello alguien tiene
+que declarar el puerto. La solución es un artefacto neutral del que dependen
+tanto los productos como los módulos, y del que ninguno de los dos depende
+del otro. Es el \emph{contract package}, un \emph{core asset} que contiene
+las declaraciones de los puertos técnicos de la línea.
+
+Lo que hace viable esta decisión es que la dependencia de un producto hacia él
+es exclusivamente de tipos, y una importación de tipos se elimina durante la
+compilación, de modo que el producto declara el contrato pero en ejecución no
+existe referencia alguna a él. Sin esa propiedad sería una dependencia real y
+la solución perdería la mitad de su valor.
+
+De ahí su regla de contenido, que es la ausencia de todo aquello que
+sobreviva a la compilación. No se enuncia como «solo interfaces», dado que
+una interfaz necesita tipos para sus parámetros y retornos. Cuando un puerto
+opera sobre datos del dominio de un producto se declara genérico y el
+producto aporta el tipo, con lo que el contrato nunca conoce el dominio de
+ningún producto y el producto nunca depende del módulo.
+
+\subsection{Las dos clases de puerto}
+
+El criterio que separa las dos clases de la Tabla~\ref{tab:puertos} es la
+firma y no el uso: un puerto es de dominio si su firma menciona conceptos del
+dominio del producto, y es técnico si su firma es expresable sin conocer ese
+dominio.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{2.4cm}p{4.8cm}p{3.5cm}p{4.0cm}}
+\toprule
+\textbf{Clase} & \textbf{Criterio} & \textbf{Quién lo declara} & \textbf{Quién lo realiza} \\
+\midrule
+De dominio & Su firma menciona conceptos del dominio del producto, como el repositorio de un agregado & El producto, en su capa de dominio & El propio producto, en su infraestructura \\
+Técnico & Su firma es expresable sin conocer el dominio, como el registro de eventos o el cifrado & El \emph{contract package} & Un módulo del catálogo \\
+\bottomrule
+\end{tabular}
+}
+\caption{Las dos clases de puerto y la propiedad de cada una}
+\label{tab:puertos}
+\end{table}
+
+La consecuencia es que ningún módulo puede apropiarse de un puerto de
+dominio. Un repositorio expresa intención de negocio en el lenguaje del
+producto, y no puede provenir de un activo genérico sin arrastrar el dominio
+hacia el catálogo. En sentido inverso, un módulo sí puede proponer un puerto
+técnico nuevo, porque exigir aprobación previa para cada uno convertiría el
+contrato en el cuello de botella del catálogo. El caso que obliga a ejercitar
+las dos clases a la vez es la persistencia, y se desarrolla en el
+Capítulo~\ref{cap:gestor}, donde el módulo que la realiza se construye.
+
+\section{La variabilidad de la línea}
+\label{sec:variabilidad}
+
+El modelo de variabilidad declara qué puede diferir entre un producto y otro.
+Es el contrato que la herramienta consume, y por eso se escribe en un formato
+declarativo legible por máquina, porque sin él la parametrización se decidiría
+sobre la marcha durante la implementación y dejaría de ser verificable.
+Reside en artefactos versionados, cada uno con su esquema, que la
+verificación de la línea valida en cada entrega.
+
+Las decisiones se agrupan en las tres clases de la
+Tabla~\ref{tab:clases-variabilidad}, y la clase determina la forma de la
+respuesta.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{2.6cm}p{5.4cm}p{6.6cm}}
+\toprule
+\textbf{Clase} & \textbf{Qué resuelve} & \textbf{Forma de la decisión} \\
+\midrule
+Identidad & Qué representa el producto y cómo se nombra & Un valor escrito o elegido \\
+Selección & Qué capacidades del dominio incorpora & Un subconjunto de un conjunto declarado \\
+Presencia & Qué piezas opcionales se incluyen & Inclusión u omisión \\
+\bottomrule
+\end{tabular}
+\caption{Clases de variabilidad del modelo}
+\label{tab:clases-variabilidad}
+\end{table}
+
+La clase de selección es la que sitúa este modelo dentro del cuadrante de
+análisis de requerimientos de la aplicación, porque es el punto donde el
+desarrollador elige características y no solo nombra lo que se genera. El
+modelo declara trece puntos de variación, cada uno con su clase, su valor por
+defecto y las condiciones que lo habilitan o lo excluyen.
+
+\subsection{El espacio de selección de dominio}
+
+El \emph{Service Domain} no se escribe libremente, sino que se elige de un
+conjunto declarado. La escritura libre dejaría el metadato de dominio sin
+validación posible y convertiría la alineación con el estándar en una
+afirmación no verificable, que es precisamente lo que el marco buscaba
+evitar. Cada entrada describe una capacidad de negocio con su área, su grupo,
+la entidad de información que gobierna y las operaciones que el estándar
+publica sobre ella. El estándar modela cada capacidad en dos niveles y el
+espacio recoge ambos, de modo que al derivar se ofrecen tanto las operaciones
+que gobiernan el ciclo de vida de la capacidad como las de sus subdivisiones.
+
+Una entrada existe cuando sirve a un propósito escrito del proyecto, y se
+agrega junto con ese propósito. No se agrega para poblar un catálogo ni para
+cubrir un \emph{Business Domain}, porque transcribir entero el subconjunto
+que el marco declaró convertiría una lista de referencia en una asignación
+definitiva y pondría a elegir entre capacidades que el contexto no va a
+construir.
+
+\paragraph*{La fuente del dato, y su límite}
+
+El dato de una capacidad se transcribe del documento que el estándar publica
+para ese \emph{Service Domain}, y no de una vista general del
+\emph{Service Landscape} ni de una paráfrasis. La distinción no es formal, y lo
+demostró una transcripción hecha sin ese documento, que atribuyó a una
+capacidad una cláusula que pertenece a otra, le asignó una operación en un
+nivel que el estándar no usa y declaró como no mutante una operación que el
+documento
+publica con cuerpo de petición. Los tres errores se corrigieron al conseguir
+la fuente.
+
+La consecuencia es un límite declarado y no un hueco oculto, porque solo las
+capacidades cuyo documento publicado está a la vista se transcriben, y las
+demás conservan su descripción parafraseada hasta que lo esté. Inventar el
+contenido del estándar sería el modo de perder exactamente la propiedad que
+justifica adoptarlo.
+
+\paragraph*{La capacidad que el catálogo no ofrece}
+
+El mecanismo admite declarar un \emph{Service Domain} fuera del espacio por
+defecto, registrando el \emph{Business Domain} que lo contiene, y prohíbe
+únicamente omitir el metadato. El contexto lo necesita porque no todo backend
+del laboratorio corresponde a una capacidad que el estándar publique.
+
+Lo que se mantiene cerrado es la \emph{forma} de la respuesta, no siempre el
+conjunto de valores. Una capacidad declarada elige su \emph{Business Domain}
+entre los que el marco reconoce y sus operaciones entre los términos de
+acción que el mecanismo deriva, y el \emph{Business Area} se lee del grupo en
+lugar de preguntarse, lo que impide que un producto responda las dos cosas
+por separado y se contradiga con el estándar. El metadato sigue validado, de
+modo que lo que cae es la forma y no la razón.
+
+El registro del producto marca el caso, y esa marca habilita una pregunta que
+antes no tenía dónde formularse: cuántos productos de la línea responden por
+una capacidad que el estándar no publica, y cuáles de ellas se repiten. Tres
+productos declarando la misma capacidad es la evidencia que justifica
+incorporarla al catálogo, y constituye el flujo de retorno de requerimientos
+hacia el dominio que el modelo de referencia declara.
+
+\section{De la plantilla base al almacén de plantillas}
+\label{sec:almacen}
+
+\subsection{La plantilla base como validación del marco}
+\label{sec:activo-base}
+
+La plantilla base es el proyecto del que se derivan todos los demás, y el
+primer artefacto ejecutable de este trabajo. Materializa la estructura de la
+sección~\ref{sec:organizacion-codigo} y trae el entorno de trabajo ya
+configurado, con el análisis estático y su regla de dependencia activada como
+error, el ejecutor de pruebas, las herramientas de formato y la configuración
+externalizada que RNF-05 exige.
+
+Su función va más allá de servir de punto de partida, porque es la validación
+del marco. Si no arranca, o no supera su propio análisis estático, el problema
+está en la definición y no en el código, y hay que corregir la definición
+antes de seguir. Esa es la razón por la que se construye antes que la
+herramienta.
+
+Una decisión de este hito condiciona el resto de la fase, y es que la plantilla
+base no se mantiene a mano, sino que es exactamente el resultado de rendir las
+plantillas con una entrada determinada. La verificación lo comprueba archivo
+por archivo, con la única excepción de los tres que llevan la identidad del
+artefacto, que en el activo describen un activo y en un producto describen un
+producto. La consecuencia es que no pueden divergir, porque un cambio en una
+plantilla que no se refleje en el activo rompe la verificación y un retoque
+manual del activo la rompe igual. Es el mecanismo que impide que la plantilla
+y su referencia se separen en silencio, que es el modo habitual en que un
+generador deja de producir lo que su ejemplo muestra.
+
+\subsection{Una plantilla es un activo que se describe a sí mismo}
+
+Con una sola plantilla, el reparto entre lo que la plantilla declara y lo que
+la herramienta sabe no tiene que decidirse, porque todo puede vivir en la
+herramienta sin que se note. El alcance del proyecto compromete otra cosa, ya
+que habla de un sistema de almacenamiento de plantillas y RF-14 del catálogo
+de plantillas y módulos, en plural. Hacer exigible esa promesa obligó a hacer
+el reparto explícito, y lo que salió es más firme que lo que había.
+
+Una plantilla pasa a ser un activo del catálogo del mismo rango que un
+módulo, y como tal se describe a sí misma en un manifiesto que viaja en su
+paquete, declarando el contrato contra el que se construyó, qué forma de
+producto deriva, dónde viven sus archivos y de qué está hecho su producto. El
+manifiesto va en el paquete y no en el catálogo por el mismo argumento que
+rige para un módulo, porque lo que una plantilla declara de sí misma cambia
+con ella, y ponerlo en el catálogo obligaría a coordinar dos repositorios para
+publicar una versión. Sus archivos salieron de la herramienta al paquete de
+la plantilla, con lo que una plantilla de otro equipo puede vivir en el
+repositorio de ese equipo y una versión de la plantilla deja de costar una
+versión de la herramienta.
+
+\paragraph*{La forma del producto, como contrato}
+
+La línea había descrito en prosa los puntos donde un módulo inserta su
+cableado, y la herramienta los conocía como constantes de su propio código.
+Con una plantilla eso bastaba; con dos deja de bastar, porque una plantilla
+que ponga su punto de composición en otro archivo sería inservible. La forma
+del producto pasó entonces a ser un dato con nombre y versión, declarado en
+tres lugares que se comparan entre sí: la plantilla declara qué forma derivan
+sus productos, el producto la lleva escrita en su registro, y el módulo
+declara a qué formas sirve.
+
+Un punto de inserción de los ocho que la forma hexagonal declara no dice solo
+dónde se inserta, sino con qué sintaxis se comenta el archivo que lo contiene,
+que es lo que permite que el mismo motor escriba en un archivo de TypeScript y
+en uno de configuración sin conocer ninguno de los dos.
+
+El producto lleva la forma y no se lee de la plantilla, por la misma razón
+por la que registra con qué versión del activo fue derivado. La
+compatibilidad de un módulo se decide contra el producto, y la plantilla que
+lo derivó puede no estar instalada, no estar publicada o no existir. Lo que
+el producto es tiene que poder leerse del producto.
+
+El cambio tuvo además una consecuencia de la clase que una definición en prosa
+no obliga a resolver. El marco suponía que
+el producto había derivado del activo que escribió esas marcas, y nadie lo
+comprobaba. Hoy son dos rechazos de la composición: uno cuando un módulo
+reemplaza una región que la forma del producto no declara, y otro cuando al
+producto le falta un punto que su propia forma declara. Un supuesto implícito
+pasó a ser comprobable por los dos lados.
+
+\subsection{El motor y la frontera de lo expresable}
+
+Con un solo activo base el motor podía limitarse a sustituir nombres, y la
+propiedad que lo protegía era que las plantillas no deciden nada. Un almacén
+con más de una plantilla obliga a revisar esa propiedad, porque una plantilla
+que no pueda expresar una condición tiene que duplicarse en dos archivos por
+cada decisión, y eso fue lo que llevó a que una sola plantilla ocupara más de
+cincuenta archivos.
+
+El motor ganó entonces condición y repetición, pero con una gramática
+cerrada, que es una propiedad más fuerte que la anterior y no una renuncia.
+Antes se afirmaba que las plantillas no deciden nada; ahora se afirma que
+todo lo que una plantilla puede decidir está enumerado, en tres
+construcciones y dos tablas cerradas. No hay evaluación dinámica de código,
+no existe forma de que una plantilla nombre una función, y la condición la
+lee el mismo evaluador que ya leía las restricciones del modelo de
+variabilidad, de modo que no hay una segunda gramática que mantener. Una
+etiqueta que el motor no reconoce es un defecto de la plantilla y aparece en
+la verificación del activo que la posee. Con esa capacidad, los archivos de
+plantilla se redujeron casi a la mitad.
+
+La frontera de lo expresable se escribió como parte de la decisión, y dos
+cosas se eliminaron en lugar de expresarse. El formato por ancho de línea
+salió porque es formato y lo comprueba el verificador del propio producto, y
+el impresor de literales del documento de API pasó a ser texto en su
+plantilla. Lo que queda del lado de la herramienta queda por una razón
+declarada, porque es mecanismo y no producto: las huellas de integridad, el
+reloj, el respaldo, las preguntas, el registro, el catálogo y los códigos de
+salida.
+
+El efecto sobre el código fue que la función que escribía el producto dejó de
+ser el catálogo de archivos del producto escrito en código y pasó a ser un
+intérprete, con una firma que no nombra ni el framework, ni el estándar, ni
+ninguna carpeta de un producto.
+
+\subsection{La evidencia de que el mecanismo es genérico}
+
+Todo lo anterior descansa en una proposición: que lo que queda en la
+herramienta es un mecanismo y no la descripción de un ejemplo. Con una sola
+plantilla la proposición no es comprobable, porque un intérprete genérico y
+una función escrita para ese caso se comportan igual.
+
+La evidencia se produjo en dos formas que prueban cosas distintas, y la primera
+es una plantilla de otra familia como fixture de prueba, en otro lenguaje,
+con otro estilo de comentario, un trabajo por lotes en lugar de un servicio y
+un contrato que no es el de esta línea; prueba que el intérprete deriva una
+familia de entrada distinta. La segunda es una plantilla publicable que
+deriva un API HTTP sin servidor propio, con otra forma de producto; prueba lo
+que el fixture no puede, que es que una plantilla de otra forma pasa las
+puertas de la línea, deriva un producto que registra esa plantilla y esa
+forma, se instala y supera su propia verificación.
+
+Lo que la segunda plantilla difiere no es un segundo caso de lo mismo. No
+tiene contenedor de inyección, no tiene servidor propio, y sus puntos de
+inserción son cinco en lugar de ocho, con uno de los roles que sencillamente
+no existe. Ese último dato es el hallazgo del contrato de forma, porque el
+archivo de configuración de esa plataforma es JSON estricto y un punto de
+inserción es una línea de comentario que ahí dejaría el archivo inválido. Una
+forma cuyo archivo de configuración es JSON no puede tener punto de entorno, y
+el contrato lo expresa sin inventar nada, porque la forma declara los puntos
+que tiene y el mecanismo rechaza nombrando el que falta.
+
+La ronda dejó además probado lo que era una condición de diseño declarada y
+nunca ejercida, que es que el diseño no quedó atado a un framework concreto.
+Una plantilla sobre otro modelo de ejecución entró sin que una línea de la
+herramienta cambiara.
+
+\section{Gobierno de los activos y catálogo}
+\label{sec:gobierno-activos}
+
+Una línea de producto sostiene tres actividades en paralelo: el desarrollo de
+los activos reutilizables, el de los productos que se derivan de ellos, y la
+gestión que decide el alcance, asigna responsables y sostiene la línea en el
+tiempo \citep{Clements2001}. Las dos primeras quedaron resueltas con los
+activos y el mecanismo; la tercera es la que responde a la brecha B-03, porque
+sin gestión los activos derivan, nadie responde por ellos y el catálogo se
+convierte en una lista de cosas que alguien publicó alguna vez.
+
+\subsection{Tipos de activo y escala de adaptación}
+
+El catálogo reconoce cuatro tipos de \emph{core asset}, de los que la
+plantilla aporta la estructura de partida de un producto; el módulo, la
+realización de una o más capacidades técnicas; el \emph{contract package}, las
+declaraciones de los puertos técnicos de la línea; y el manifiesto del
+catálogo describe a los demás. Tres condiciones son comunes a todos: un
+responsable declarado, un versionado que distinga el cambio incompatible del
+compatible, y la posibilidad de saber qué productos lo consumen. La tercera es
+la que hace gobernable al conjunto, porque permite responder qué se ve
+afectado por un cambio consultando el catálogo, sin abrir los repositorios de
+los productos. El responsable es un equipo y no una persona, porque un activo
+cuyo responsable fuera una persona quedaría huérfano al salir esa persona de
+la organización. Las condiciones específicas por tipo las detalla el documento
+de gobierno de los activos de la Fase 2.
+
+El equipo que recibe el producto derivado conserva la autonomía de
+modificarlo y, al mismo tiempo, la línea debe poder propagarle cambios. La
+escala de adaptación de la Tabla~\ref{tab:adaptacion} resuelve esa tensión
+declarando tres niveles con consecuencias distintas.
+
+\begin{table}[H]
+\centering
+{\footnotesize
+\begin{tabular}{p{2.8cm}p{5.6cm}p{6.3cm}}
+\toprule
+\textbf{Nivel} & \textbf{Qué hace el equipo} & \textbf{Efecto sobre la propagación} \\
+\midrule
+Configuración & Ajusta valores previstos por el activo, fuera del código & El producto sigue recibiendo toda mejora del activo \\
+Reemplazo & Sustituye el adaptador de un puerto por otro propio, conservando el contrato & El producto sigue recibiendo las mejoras que no tocan el adaptador reemplazado \\
+Copia desvinculada & Copia el código del activo al producto y lo modifica & El producto deja de recibir mejoras, y el catálogo lo registra como desvinculado \\
+\bottomrule
+\end{tabular}
+}
+\caption{Escala de adaptación y su efecto sobre la propagación de cambios}
+\label{tab:adaptacion}
+\end{table}
+
+Los dos primeros niveles convierten la adaptabilidad en una propiedad
+arquitectónica y no en una concesión. El tercero se admite en lugar de
+prohibirse por una razón práctica, porque prohibirlo no evitaría que ocurra,
+solo lo dejaría sin registro. Una copia desvinculada se lee entonces como
+señal de que al activo le falta un punto de configuración o de reemplazo, y
+alimenta el flujo de nuevos requerimientos hacia el análisis del dominio.
+
+\subsection{Versionado y cambio incompatible}
+
+La línea fija qué constituye un cambio mayor, uno menor y un parche, porque
+de ello depende que dos productos puedan operar con versiones distintas de un
+mismo activo, que es el criterio de RNF-06. El documento de gobierno de los
+activos de la Fase 2 enumera cada caso.
+
+Lo que importa es el criterio con que se decide, porque la compatibilidad se
+determina por inspección de lo declarado, es decir la firma de las
+operaciones, el esquema de configuración y el identificador de registro. Toda
+la evidencia necesaria está en el contrato, sin recurrir a la ejecución, y
+con el lenguaje adoptado el compilador detecta por sí mismo los cambios de
+firma que rompen a un consumidor. De ello se sigue una limitación asumida de
+forma explícita, y es que el activo no se comprueba ejecutándolo, de modo que
+un cambio de comportamiento que no altere la firma pasa inadvertido. Se registra
+como punto de extensión.
+
+El \emph{contract package} se organiza en submódulos por capacidad pero se
+versiona como una unidad, de modo que un cambio incompatible en una capacidad
+eleva la versión mayor de todas. La consecuencia se asume, porque un producto
+que consume una sola capacidad recibe una versión mayor que no le afecta, y
+un módulo puede verse obligado a republicarse sin que su implementación haya
+cambiado. La separación en artefactos independientes queda prevista, con una
+señal de cuándo conviene hacerla: cuando un módulo deba republicarse sin
+alterar su implementación más de dos veces, el acoplamiento de versión cuesta
+más de lo que ahorra en gobernanza.
+
+\subsection{El catálogo, su gobernanza y la resolución en ejecución}
+\label{sec:catalogo-operacion}
+
+El catálogo es un manifiesto declarativo y versionado que reside en un
+repositorio propio y que \emph{describe} activos sin contenerlos: una entrada
+nombra el paquete y su responsable, de modo que un módulo construido por otro
+equipo vive en el repositorio de ese equipo y el catálogo solo lo registra.
+Esa forma es lo que satisface RF-14 sin desplegar ni operar ninguna
+plataforma, y lo que cierra la brecha B-03 al alcance de un equipo pequeño.
+Los campos de una entrada y los estados por los que pasa se recogen en ese
+mismo documento.
+
+Incorporar una entrada exige que el activo satisfaga las condiciones de
+validez y que la propuesta sea revisada por un rol responsable del gobierno
+de la línea, cuya existencia define el marco mientras que a quién se le
+asigna lo decide cada organización que lo adopte. No se admite retirar un
+activo, porque uno del que dependen productos existentes no puede eliminarse
+sin romperlos. El estado de desuso es terminal, el activo deja de ofrecerse al
+derivar y permanece en el catálogo indefinidamente. El retiro acompañado
+de un procedimiento de migración se registra como trabajo futuro.
+
+La forma en que la herramienta obtiene el catálogo cambió al medir su costo, y
+el episodio ilustra un criterio. La primera versión fijaba la versión del
+catálogo dentro de la herramienta, con el argumento de que RF-05 exige que la
+misma entrada produzca el mismo resultado. Medido, ese argumento no se
+sostenía y el costo era alto, porque una entrada nueva costaba dos
+publicaciones y una de ellas era una versión de la herramienta cuyo único
+cambio sustantivo era un número. El determinismo que RF-05 pide no lo daba la
+versión del catálogo sino el pin de la plantilla, porque lo que determina la
+estructura de un producto es el contenido del activo del que se deriva, no la
+lista de activos que existen. El catálogo pasa entonces a resolverse en
+ejecución, con tres fuentes en orden —la ruta que dé la invocación, la última
+versión que sirve el registro, y la copia instalada cuando el registro no
+responde—, informando cuál de ellas respondió.
+
+Lo que sí queda fijado dentro de la herramienta es la versión exacta de cada
+plantilla que esa entrega ofrece, con una versión exacta y nunca un rango,
+porque un rango haría que dos ejecuciones de la misma herramienta resolvieran
+versiones distintas. Un módulo no se fija así, sino que se resuelve a la
+última publicada y la versión obtenida queda registrada en el producto, ya
+que pinar cada módulo obligaría a publicar una versión de la herramienta por
+cada versión de cada módulo, que es exactamente la dependencia que el
+catálogo existe para evitar.
+
+\section{El núcleo de la herramienta y la operación de derivación}
+\label{sec:herramienta-cli}
+
+Con los activos construidos y el catálogo en operación, el hito siguiente es
+el mecanismo que los consume. La herramienta se construyó separando lo que
+toda operación comparte de lo que es propio de una, y esa separación es lo
+que permitió a la fase siguiente ampliarla en lugar de rehacerla.
+
+\subsection{El núcleo y sus puertos}
+\label{sec:nucleo-herramienta}
+
+Pertenece al núcleo aquello que una segunda operación necesitaría igual: la
+resolución de la entrada contra el modelo de variabilidad, la consulta al
+catálogo, la lectura y escritura del registro de versiones del proyecto, la
+conversión de toda escritura en un plan de cambios antes de aplicarlo, y la
+traducción de cualquier fallo a un código de salida estable.
+
+El marco exige arquitectura hexagonal al proyecto generado, y la herramienta
+la aplica a sí misma. Su núcleo no conoce el sistema de archivos, el registro
+de paquetes, la terminal ni el reloj, sino que los declara como los seis
+puertos de la Tabla~\ref{tab:puertos-nucleo} y recibe sus implementaciones
+desde fuera.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4.8cm}p{10.2cm}}
+\toprule
+\textbf{Puerto} & \textbf{Qué abstrae} \\
+\midrule
+Sistema de archivos & Leer, escribir y comprobar existencia de rutas \\
+Registro de paquetes & Obtener un activo y resolver la dirección del registro de un ámbito \\
+Preguntas & Pedir al desarrollador lo que la invocación no trajo \\
+Reporte & Lo que la herramienta dice, con su forma \\
+Reloj & El momento que el producto registra como su procedencia \\
+Ejecutor de comandos & Invocar procesos externos, como el gestor de paquetes o el control de versiones \\
+\bottomrule
+\end{tabular}
+\caption{Los seis puertos del núcleo de la herramienta}
+\label{tab:puertos-nucleo}
+\end{table}
+
+La consecuencia práctica es que el comportamiento del núcleo se prueba sin
+tocar disco, sin red y sin terminal, con dobles escritos a mano que
+implementan cada puerto. Esa decisión es la que hace que la suite corra en
+segundos y que una prueba falle por el motivo que dice y no por el entorno
+donde se ejecuta.
+
+Ese contrato es estrecho, porque una operación declara su nombre, su resumen,
+los parámetros que admite y una función que recibe la entrada ya validada
+junto con el contexto de puertos.
+El despachador no sabe qué operaciones existen, sino que las lee de un
+registro, de modo que agregar una es escribir su módulo y registrarla sin
+modificar el núcleo. Ese punto de extensión es el entregable que la fase
+siguiente consume, y su existencia se comprobó antes de necesitarla, porque la
+operación de consulta del catálogo se construyó en esta misma fase sobre el
+mismo contrato, de modo que la segunda operación existió mientras el punto de
+extensión todavía podía corregirse.
+
+\subsection{La operación de derivación}
+\label{sec:comando-generacion}
+
+La operación de derivación resuelve la plantilla contra el catálogo y la
+obtiene del registro, recoge las decisiones de variabilidad, comprueba que la
+combinación elegida satisfaga las reglas del modelo, y convierte todo ello en
+un plan de cambios que el núcleo escribe. Al terminar existe un proyecto que
+arranca sin que nadie edite un archivo.
+
+Una operación de negocio elegida no produce un archivo sino un recorrido
+completo desde la superficie externa hasta el contrato del repositorio: un
+método en el adaptador HTTP con su ruta, un caso de uso en la capa de
+aplicación, el método que ese caso de uso necesita en el puerto del
+repositorio, y un evento de dominio cuando la operación cambia el estado de la
+entidad que la capacidad gobierna. Ese reparto no se decide archivo por
+archivo, sino que cada operación recorre el mismo camino desde que se elige
+hasta los archivos que produce, pasando por la entrada que la herramienta
+resuelve y por las reglas que convierten un término de acción en un nombre de
+clase, una ruta, un método y un evento. Es lo que hace que la selección de
+características tenga consecuencias estructurales y no cosméticas.
+
+\paragraph*{El límite de lo que se genera}
+
+El mecanismo produce la estructura, los nombres y los contratos vacíos,
+mientras que las reglas de negocio las construye el equipo que recibe el
+proyecto, y mantener esa distinción es lo que mantiene al artefacto dentro de
+su alcance.
+
+La distinción se declara donde se nota, de modo que las operaciones cuyo
+efecto se sigue del propio término de acción se generan completas; las que
+dependen de la capacidad se generan cargando la entidad, persistiéndola,
+publicando su evento y dejando el efecto marcado con un comentario. El
+registro del producto declara, por operación, cuál de los dos casos es, y el
+producto lo dice en su propia documentación. Un producto que pareciera más
+terminado de lo que está sería el peor resultado posible de un generador.
+
+\paragraph*{Determinismo}
+
+La misma entrada produce el mismo producto, sin importar quién ejecute el
+comando. Tres decisiones lo sostienen: la versión de la plantilla se resuelve
+contra el pin que viaja en la herramienta y no contra el registro; toda
+escritura pasa por un plan de cambios que es un dato inspeccionable antes de
+aplicarse; y el único valor que varía entre dos ejecuciones idénticas, que es
+el momento de la derivación, se obtiene por un puerto y se registra en un
+campo conocido. La verificación deriva el mismo producto dos veces y compara
+los árboles resultantes excluyendo ese campo.
+
+\paragraph*{El recorrido de entrada}
+
+La operación cierra con una revisión que muestra cada decisión tomada y
+ofrece corregir cualquiera de ellas antes de escribir nada. Corregir una
+respuesta vuelve a preguntar únicamente lo que depende de ella, y la razón es de
+adopción y no de comodidad, porque una pregunta del estándar contestada mal
+costaba el comando entero, y ese costo es el que hace que un desarrollador
+deje de leer las preguntas. Fuera de una terminal la revisión declara y
+continúa, porque una corrida automatizada no tiene a quién preguntar.
+
+El recorrido completo se corrigió además en un punto que ninguna prueba veía,
+y la causa es estructural, porque los circuitos automáticos corren con
+banderas y ningún camino automático pasa por una pregunta. Lo que apareció al
+recorrerlo a mano fue que una condición no satisfecha se comprobaba después
+de cerrar todas las preguntas, y el costo de no satisfacerla era perderlas
+todas. Hoy la condición viaja con la pregunta y se rechaza ahí mismo, la
+elección de plantilla ocurre antes de la primera pregunta del modelo, y la
+tecla de escape retrocede una pregunta en lugar de abandonar el comando.
+
+El recorrido abre eligiendo la plantilla, antes de cualquier pregunta del
+modelo, ofreciendo las dos opciones del almacén con lo que cada una deriva
+como pista y mostrando la lista entera en lugar de enrollarse sobre sí misma.
+
+\section{Verificación y conformidad}
+\label{sec:pruebas-fase-2}
+
+El último hito no agrega funcionalidad, sino que produce la evidencia de que
+lo construido hace lo que debía, y opera en dos niveles cuya distinción es
+deliberada. El primero prueba la herramienta con dobles de sus puertos,
+comprobando la resolución de la entrada, la evaluación de las reglas del
+modelo, el reparto de archivos por operación y los nombres derivados, sin
+tocar disco ni red. El segundo deriva productos reales y los somete a su
+propia verificación —análisis estático, pruebas y compilación—, que es la
+única forma de saber que lo generado es código válido y no texto bien
+formado.
+
+\subsection{Romper la regla para saber que existe}
+
+Un producto que supera su análisis estático demuestra que el analizador
+corre, no que la regla de dependencia esté activa. La verificación introduce
+por eso, a propósito, una importación que la regla prohíbe, exige que el
+análisis falle nombrando esa regla, y restaura el archivo. El criterio se
+generalizó a toda regla nueva de la línea: una regla cuya violación no se
+haya comprobado no está verificada, está escrita.
+
+El criterio dio su propio resultado, porque una regla que exigía una prueba de
+humo por cada ruta declarada se satisfacía con que la ruta apareciera en el
+título de la prueba, no con que alguna petición la ejercitara, de modo que una
+prueba apuntada a otra ruta la habría pasado. El defecto apareció al intentar
+romperla y no al escribirla.
+
+\subsection{Conformidad del producto derivado}
+
+El producto se verifica contra la condición de llegada de la fase y no contra
+una lista de archivos: arranca sin edición previa, responde sus sondas,
+registra lo que sirve, no registra las sondas, y no contiene direcciones ni
+lecturas del entorno fuera de su módulo de configuración. El circuito deriva
+varios productos con entradas distintas —capacidades distintas, las dos
+formas de ruta, con y sin eventos, una capacidad declarada fuera del
+catálogo— y cada uno pasa su propia verificación, que es la evidencia que el
+Capítulo~\ref{cap:evaluacion} cita.
+
+La documentación de instalación y uso de la herramienta vive en el
+repositorio de los activos y viaja en el paquete publicado, no en este
+documento, por una razón de mantenimiento, y es que una guía de uso transcrita
+en la tesis quedaría desactualizada en la primera versión publicada.
+
+\section{Resumen del capítulo}
+
+Esta fase convirtió un encuadre en un mecanismo, de modo que lo que al cerrar el
+Capítulo~\ref{cap:fundamentacion} era una definición es ahora una herramienta
+instalable que produce proyectos conformes a ella sin intervención manual, y
+con ella las tres reglas concretas que el marco había dejado asignadas: la
+forma de un producto válido, los contratos por los que se le acopla una
+capacidad compartida, y el gobierno de los activos que lo sostiene en el
+tiempo.
+
+Cuatro decisiones estructurales sostienen el resultado, y la primera es el
+orden de los hitos, porque los activos se construyeron antes que el
+generador, de modo que la plantilla base funcionó como validación ejecutable
+del marco cuando corregirlo todavía era barato. La segunda es la separación
+entre el núcleo común y la operación concreta, con un punto de extensión
+comprobado antes de necesitarlo, que es lo que permite a la fase siguiente
+ampliar la herramienta en lugar de rehacerla. La tercera es que la plantilla
+base es la salida de sus propias plantillas y no un artefacto mantenido en
+paralelo, lo que hace imposible que se separen en silencio. Y la cuarta es el
+\emph{contract package} como artefacto neutral del que dependen productos y
+módulos sin depender entre sí, que es la pieza de la que depende todo el
+mecanismo de composición del capítulo siguiente.
+
+La variabilidad quedó declarada en artefactos versionados y no en el código
+del generador, y esa separación es la que permitió después ampliar el espacio
+de selección, incorporar el segundo nivel del estándar y admitir una
+capacidad fuera del catálogo sin modificar la herramienta. Es también el
+punto donde el estándar interviene en el mecanismo y no solo en el registro,
+porque sin el espacio de selección la alineación con BIAN se reduciría a un
+metadato escrito a mano.
+
+El quinto hito dejó la lección más incómoda y la más útil, porque con un solo
+activo base, el reparto entre lo que la plantilla declara y lo que la
+herramienta sabe podía no decidirse, y la consecuencia fue que la herramienta
+guardaba el catálogo de archivos del producto dentro de su código. Cerrar la
+promesa de un almacén obligó a hacer ese reparto explícito, y lo que salió es
+más firme que lo que había: una plantilla que se describe a sí misma, un motor
+cuya capacidad de decisión está enumerada, una derivación que es un intérprete
+y una forma de producto comprobable por los dos lados. La evidencia de que el
+resultado es genérico no es un argumento sino una segunda plantilla, de otro
+modelo de ejecución, que entró sin que una línea de la herramienta cambiara.
+
+Queda abierto, por construcción, todo lo que exige módulos que aún no
+existen: incorporarlos a un producto, consultarlos, actualizarlos y preservar
+el código propio del equipo al hacerlo. Es el objeto del
+Capítulo~\ref{cap:gestor}.

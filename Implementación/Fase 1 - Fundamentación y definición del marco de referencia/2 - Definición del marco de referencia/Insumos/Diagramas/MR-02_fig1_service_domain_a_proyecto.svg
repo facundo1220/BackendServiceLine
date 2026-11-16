@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="424" viewBox="0 0 860 424" font-family="Inter, Segoe UI, Helvetica Neue, Arial, sans-serif">
+<rect width="860" height="424" fill="#ffffff"/>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#323232"/></marker>
+</defs>
+<rect x="32" y="32" width="235" height="360" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="149.5" y="58" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Service Landscape v14.0</text>
+<rect x="312" y="32" width="235" height="314" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="429.5" y="58" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Qué determina BIAN</text>
+<rect x="593" y="32" width="235" height="314" rx="8" fill="none" stroke="#323232" stroke-width="1.6" stroke-dasharray="7 5"/>
+<text x="710.5" y="58" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Qué registra el proyecto</text>
+<rect x="48" y="78" width="203" height="50" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="149.5" y="109" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Business Area</text>
+<rect x="48" y="146" width="203" height="50" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="149.5" y="177" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Business Domain</text>
+<rect x="48" y="214" width="203" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="2.6"/>
+<text x="149.5" y="240" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Service Domain</text>
+<text x="149.5" y="262" font-size="13" fill="#323232" text-anchor="middle">Nivel elemental</text>
+<rect x="48" y="304" width="203" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="149.5" y="330" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Capacidad declarada</text>
+<text x="149.5" y="352" font-size="13" fill="#323232" text-anchor="middle">Se admite declararla</text>
+<rect x="328" y="78" width="203" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="429.5" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Identidad</text>
+<text x="429.5" y="126" font-size="13" fill="#323232" text-anchor="middle">Qué capacidad representa</text>
+<rect x="328" y="168" width="203" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="429.5" y="194" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Frontera</text>
+<text x="429.5" y="216" font-size="13" fill="#323232" text-anchor="middle">Hasta dónde llega</text>
+<rect x="328" y="258" width="203" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="429.5" y="284" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Nomenclatura</text>
+<text x="429.5" y="306" font-size="13" fill="#323232" text-anchor="middle">Nombre del agregado raíz</text>
+<rect x="609" y="78" width="203" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="710.5" y="104" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Metadato de dominio</text>
+<text x="710.5" y="126" font-size="13" fill="#323232" text-anchor="middle">Service y Business</text>
+<rect x="609" y="168" width="203" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="710.5" y="194" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Bounded context</text>
+<text x="710.5" y="216" font-size="13" fill="#323232" text-anchor="middle">Sin solapamiento</text>
+<rect x="609" y="258" width="203" height="72" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="710.5" y="284" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Esqueleto</text>
+<text x="710.5" y="306" font-size="13" fill="#323232" text-anchor="middle">Agregado raíz sin lógica</text>
+<polyline points="149.5,128 149.5,146" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="149.5,196 149.5,214" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="267,204 312,204" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="547,204 593,204" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+</svg>

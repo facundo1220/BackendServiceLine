@@ -1,0 +1,348 @@
+%%==========================================================
+%%  CAPÍTULO 1: INTRODUCCIÓN
+%%==========================================================
+
+Este capítulo sitúa el trabajo presentando el problema que lo origina, los
+objetivos que se comprometió a alcanzar, el alcance dentro del cual se movió,
+la metodología que lo organizó y los resultados que produjo.
+
+El trabajo construye una herramienta de línea de comandos que genera
+proyectos backend estandarizados y permite incorporarles funcionalidades
+transversales reutilizables, para un equipo de desarrollo que opera en una
+entidad financiera regulada. Los cuatro capítulos centrales desarrollan cada
+una de las fases de la metodología, y los dos últimos cierran el trabajo
+contra sus objetivos.
+
+\section{Definición del problema}
+
+\subsection{Planteamiento del problema}
+\label{sec:planteamiento}
+% Migrado desde Anteproyecto, sección 1 (Planteamiento del Problema)
+En los procesos actuales de transformación digital, las organizaciones han aumentado la demanda de desarrollo y evaluación de software con el fin de soportar sus capacidades de negocio. Esta tendencia se enmarca en el reconocimiento de la transformación digital como un impulsor fundamental de la competitividad empresarial, con cerca del 90\% de las organizaciones inmersas en estas iniciativas y un gasto global proyectado que superará los 4 billones de dólares para 2027 \citep{Jie2025}. Este crecimiento ha generado una presión constante por reducir los tiempos de entrega y aumentar la eficiencia de los equipos de desarrollo, debido a que la velocidad de salida al mercado se ha convertido en un factor diferencial para la competitividad y la satisfacción de los usuarios.
+
+Como respuesta a estos desafíos, las metodologías ágiles se han
+convertido en un enfoque clave para la gestión y el desarrollo de
+proyectos \citep{Palopak2024}. Sin embargo, los equipos enfrentan
+tensiones de desempeño como el equilibrio entre velocidad y calidad, lo
+que evidencia la persistencia de una brecha entre la velocidad esperada
+por el negocio y la capacidad real de mantenerla con calidad técnica
+\citep{Armbruster2025}. El Laboratorio Digital del Banco W
+\citep{UniversidadIcesi2023} es un caso de esa brecha, pues opera bajo
+marcos ágiles con prácticas como Dual Track Agile \citep{MartyCagan2012}
+y, a medida que logra entregar más rápido, las expectativas
+institucionales aumentan y la agilidad pasa de ser una ventaja a
+convertirse en el nuevo estándar exigido.
+
+En su práctica habitual, el inicio de un proyecto implica configurar
+desde cero la estructura base del sistema, las convenciones técnicas y
+las integraciones con servicios externos, mientras que la incorporación
+de funcionalidades transversales entre aplicaciones, como autenticación,
+observabilidad o mensajería, se realiza de forma manual reutilizando
+código existente. El resultado son funcionalidades duplicadas e
+inconsistencias en la estructura de los proyectos que dificultan su
+mantenimiento y la evolución controlada del ecosistema de aplicaciones.
+Las plantillas base o \emph{boilerplates} buscan encapsular esa
+estructura común, pero su reutilización real suele ser limitada porque
+tienden a materializarse como artefactos estáticos que quedan
+desactualizados o se acoplan a contextos específicos, y se ha señalado
+que rara vez logran ser reutilizables de forma general debido a la
+diversidad de necesidades y tecnologías entre proyectos
+\citep{SeanPromsopeak2022}. Persiste por tanto la necesidad de una base
+técnica que permita industrializar el arranque de proyectos y la
+composición de capacidades reutilizables sin sacrificar la autonomía de
+los equipos ni los atributos de calidad del software.
+
+\subsection{Formulación del problema}
+\label{sec:formulacion}
+
+De lo anterior se desprende la pregunta que orienta el trabajo:
+
+\begin{quote}
+¿Cómo reducir el esfuerzo de iniciar un proyecto backend y de incorporarle
+funcionalidades transversales reutilizables, en un equipo de desarrollo de
+una entidad financiera regulada, sin sacrificar la autonomía del equipo sobre
+el código que recibe ni los atributos de calidad del software?
+\end{quote}
+
+\subsection{Sistematización del problema}
+\label{sec:sistematizacion}
+
+La pregunta general se desagrega en cuatro preguntas guía, cada una de las
+cuales se responde en un capítulo del trabajo.
+
+\begin{enumerate}
+\item ¿Qué necesita realmente un equipo de desarrollo para iniciar un
+proyecto backend estandarizado, y qué parte de esa necesidad no resuelve
+ninguna de las soluciones disponibles en el mercado?
+
+\item ¿Bajo qué enfoque, qué arquitectura y qué reglas de gobierno debe
+estructurarse una familia de proyectos para que un mismo activo pueda servir
+a varios de ellos sin que diverjan con el tiempo?
+
+\item ¿De qué manera puede automatizarse la generación de un proyecto
+conforme a esa estructura, de modo que el resultado arranque sin
+intervención manual y siga perteneciendo al equipo que lo recibe?
+
+\item ¿Cómo puede incorporarse una funcionalidad transversal a un proyecto
+ya en curso, y propagarse después un cambio de esa funcionalidad, sin
+intervenir proyecto por proyecto ni sobrescribir el código propio de cada
+equipo?
+\end{enumerate}
+
+
+\section{Objetivos del proyecto}
+
+\subsection{Objetivo General}
+% Migrado desde Anteproyecto, sección 2.1 (Objetivo General)
+Desarrollar una herramienta CLI para entornos Node.js (v22–v24) que automatice la generación de proyectos backend bajo principios de arquitectura hexagonal y Domain-Driven Design, alineados con los estándares BIAN e ISO 20022, para reducir el esfuerzo de configuración al iniciar proyectos.
+
+\subsection{Objetivos específicos}
+% Migrado desde Anteproyecto, sección 2.2 (Objetivos específicos)
+\begin{enumerate}
+\item Definir y documentar un marco de referencia que establezca las convenciones, patrones de desarrollo y criterios de organización modular del código, así como los lineamientos de alineación con los estándares BIAN e ISO 20022 que guiarán el desarrollo de la herramienta.
+
+\item Implementar un mecanismo de generación de proyectos mediante plantillas configurables que permita obtener una estructura base ejecutable alineada con el marco de referencia definido.
+
+\item Construir un gestor de módulos reutilizables que permita incorporar funcionalidades transversales mediante contratos de integración definidos y compartidos entre proyectos.
+
+\item Evaluar el comportamiento de la solución desarrollada en el contexto del Laboratorio Digital del Banco W midiendo el tiempo requerido para la generación de un proyecto frente a la línea base de proyectos existentes, la correcta incorporación de un módulo reutilizable y el inicio de implementación de lógica de negocio en el proyecto generado.
+
+\end{enumerate}
+
+\subsection{Divergencias declaradas respecto de los objetivos}
+\label{sec:divergencias}
+
+Dos cláusulas de los objetivos transcritos arriba no se cumplieron tal como
+están formuladas, y se declaran aquí porque el lector debe saberlo antes de
+leer lo que sigue. La primera es el rango de versiones de la plataforma de
+ejecución, porque la herramienta exige la versión 24 y rechaza de forma
+explícita las dos anteriores, en lugar de soportar el rango completo que el
+objetivo enuncia. La segunda es la alineación con ISO 20022, que se revisó
+como fundamento del marco de referencia y se excluyó de forma deliberada, con
+la razón que la sección~\ref{sec:fundamentos-adoptados} desarrolla.
+
+Ninguna de las dos es un descuido, y las dos tienen una decisión razonada
+detrás. El Capítulo~\ref{cap:evaluacion} las recoge, junto con el resto de
+las divergencias del proyecto, y da el veredicto de cada objetivo cláusula
+por cláusula.
+
+\section{Delimitaciones y alcances}
+\label{sec:delimitaciones-alcances}
+% Migrado desde Anteproyecto, sección 4 (Alcance del Proyecto)
+% Ajuste de tiempo verbal: "se enfocará" -> "se enfocó"; "estará orientado" -> "estuvo orientado"; "se contemplará" -> "se contemplaron"; "quedarán" -> "quedaron"
+El proyecto se enfocó en el diseño, implementación y validación de una herramienta CLI orientada a la creación de nuevos proyectos de software a partir de parámetros y configuraciones predefinidas. Además, estuvo orientado principalmente al desarrollo de aplicaciones backend.
+
+Se contemplaron los siguientes componentes y capacidades:
+
+\begin{itemize}
+    \item Desarrollo de la herramienta para su uso en un entornos de desarrollo Node.js (v22-v24).
+    \item Documentación para su instalación, configuración e implementación.
+    \item Generación de una estructura base de proyecto que funcione como plantilla inicial.
+    \item Capacidad de iniciar nuevos proyectos a partir de dichas plantillas.
+    \item Mecanismo para la implementación de funcionalidades compartidas mediante reglas definidas.
+    \item Desarrollo de un sistema de almacenamiento de plantillas, asegurando su disponibilidad para los equipos.
+    \item Generación automática de documentación openAPI basada en los módulos y funcionalidades integradas.
+\end{itemize}
+
+Quedaron fuera del alcance:
+
+\begin{itemize}
+    \item Integración con procesos de despliegue, infraestructura o automatización DevOps.
+    \item Implementación de funcionalidades específicas del negocio.
+    \item Soporte para otros lenguajes de programación o tecnologías diferentes a Node.js.
+\end{itemize}
+Más allá de ese alcance funcional, el trabajo operó bajo tres delimitaciones
+que condicionan cómo deben leerse sus resultados.
+
+La primera es de contexto. El problema se levantó sobre un único caso de
+estudio, el Laboratorio Digital del Banco W, con un equipo técnico de cuatro
+desarrolladores. Las necesidades que sostienen la especificación se
+contrastaron con desarrolladores de otras organizaciones, pero el contexto de
+aplicación es uno solo, y las conclusiones se formulan sobre propiedades
+transferibles y no sobre el caso particular.
+
+La segunda es de confidencialidad. El trabajo se desarrolla sobre una
+organización del sector financiero, de modo que no se documenta información
+privada de la entidad ni del equipo. El contexto se describe por sus
+propiedades, las decisiones se sostienen sobre necesidades y requerimientos
+verificables, y ningún dato de identificación personal se incorpora al
+documento.
+
+La tercera es de disponibilidad del estándar. La alineación con BIAN se
+sostiene sobre el documento oficial de cada capacidad de negocio, y el
+proyecto dispuso de ese documento para una sola de ellas. Las demás conservan
+una descripción derivada de las vistas generales del modelo, y así quedan
+declaradas, porque reemplazar una paráfrasis por otra no es transcribir un
+estándar.
+
+\section{Metodología de la investigación}
+% Migrado desde Anteproyecto, sección 7 (Metodología del proyecto)
+% Ajuste de tiempo verbal: "se adopta" -> "se adoptó"; "orientarán/fundamentarán/conformarán" -> "orientaron/fundamentaron/conformaron"; "Diseña y construye" -> "Diseñó y construyó" (Fases 2 y 3); "Evalúa" -> "Evaluó" (Fase 4)
+Con el fin de dar cumplimiento al objetivo general propuesto, se adoptó el enfoque de Design Science Research (DSR) como metodología general del proyecto \citep{Wieringa2014}. Este enfoque plantea la construcción de un artefacto que solucione de manera útil y efectiva un problema en un dominio determinado, lo cual se alinea de forma directa con la naturaleza del problema identificado y con los resultados esperados del proyecto.
+
+\begin{figure}[H]
+  \scalebox{0.54}{\input{src/diagramas/metodologia}}
+  \caption{Fases de la metodología Design Science Research aplicada al proyecto}
+  \label{fig:metodologia}
+\end{figure}
+\pagebreak
+
+El desarrollo se organiza en cuatro fases (Figura~\ref{fig:metodologia}), las cuales se clasifican en dos tipos según su tipo de ejecución: fases secuenciales y fases iterativas.
+
+\begin{itemize}
+  \item \textbf{Fases secuenciales:} Este tipo de ejecución responde a que sus actividades requieren consolidar resultados definidos antes de avanzar, sin necesidad de refinamiento progresivo.
+
+  \item \textbf{Fases iterativas:} Este tipo de ejecución responde a la complejidad técnica inherente a la construcción del artefacto, donde cada iteración permite refinar progresivamente el resultado a partir de los hallazgos obtenidos en la iteración anterior.
+\end{itemize}
+
+Esta sección describe la metodología, con el propósito de cada fase y
+las actividades que la componen. Su ejecución y los resultados obtenidos
+se desarrollan en los capítulos siguientes, dedicando un capítulo a cada
+fase: la Fase 1 en el Capítulo~\ref{cap:fundamentacion}, la Fase 2 en el
+Capítulo~\ref{cap:generacion}, la Fase 3 en el Capítulo~\ref{cap:gestor}
+y la Fase 4 en el Capítulo~\ref{cap:evaluacion}.
+
+\subsubsection*{Fase 1: Fundamentación y definición del marco de referencia}
+
+Estableció las bases conceptuales que orientaron el diseño y construcción del artefacto, mediante el análisis del problema, la revisión de soluciones existentes y la definición de los estándares, convenciones y principios que estructuran la solución.
+
+La fase se abordó en dos dimensiones complementarias. La \textbf{dimensión del problema} (actividades 1 a 4) comprendió un proceso formal de obtención de requisitos sobre un caso de estudio real, con el fin de sustentar en evidencia qué debe resolver la herramienta y bajo qué condiciones sería adoptada, en lugar de asumirlo de antemano. La \textbf{dimensión de la solución} (actividades 5 a 9) comprendió la revisión de las soluciones existentes y la definición del marco de referencia técnico que estructura el artefacto, una vez comprendido el problema.
+
+\paragraph*{Actividades relacionadas}
+
+\begin{enumerate}
+    \item Caracterizar el contexto de aplicación en cuanto a su forma de trabajo, su contexto tecnológico y sus prácticas de reutilización de código.
+
+    \item Identificar y justificar los stakeholders del artefacto, y definir el protocolo de entrevistas con guiones diferenciados por rol.
+
+    \item Analizar cualitativamente las entrevistas para identificar los temas recurrentes entre roles y agruparlos en los grupos temáticos que la solución debe atender.
+
+    \item Especificar los requerimientos funcionales y no funcionales de la herramienta, priorizados y trazables a los temas identificados.
+
+    \item Revisar la literatura y antecedentes sobre estandarización y generación de proyectos de software.
+
+    \item Analizar y comparar soluciones existentes en el ámbito de la generación y estandarización de proyectos de software, estableciendo un marco de evaluación e identificando las brechas que ninguna de ellas resuelve.
+
+    \item Identificar y seleccionar los principios y buenas prácticas que fundamentaron la solución, incluyendo arquitectura hexagonal y Domain-Driven Design.
+
+    \item Revisar y adoptar los estándares del sector financiero aplicables, como BIAN e ISO 20022, como referencia para la definición de dominios y capacidades bancarias reutilizables.
+
+    \item Definir las convenciones técnicas y patrones de desarrollo que conformaron la herramienta.
+\end{enumerate}
+
+\subsubsection*{Fase 2: Diseño y construcción del mecanismo de generación de proyectos}
+
+Diseñó y construyó de forma iterativa el mecanismo que permite generar proyectos con una estructura modular estandarizada desde el inicio, alineada con el marco de referencia definido en la fase anterior, reduciendo el tiempo de arranque y garantizando coherencia entre proyectos.
+
+\paragraph*{Actividades relacionadas}
+
+\begin{enumerate}
+    \item Definir los requisitos y parámetros del mecanismo de generación de proyectos.
+
+    \item Diseñar la estructura modular base alineada con los principios arquitectónicos y estándares bancarios definidos en el marco de referencia.
+
+    \item Construir el mecanismo de generación de proyectos alineado con el marco de referencia definido.
+
+    \item Configurar el entorno de desarrollo de forma reproducible, incluyendo convenciones de código y herramientas base.
+
+    \item Implementar la generación automática de documentación openAPI basada en la estructura del proyecto generado.
+\end{enumerate}
+
+\subsubsection*{Fase 3: Diseño y construcción del gestor de modulos reutilizables}
+
+Diseñó y construyó de forma iterativa el sistema que permite incorporar funcionalidades transversales en los proyectos de forma desacoplada, mediante contratos de integración definidos y compartidos entre proyectos, garantizando su reutilización sin generar dependencias entre su implementación concreta y la lógica de negocio de cada proyecto.
+
+\paragraph*{Actividades relacionadas}
+
+\begin{enumerate}
+    \item Identificar y categorizar las funcionalidades transversales reutilizables entre proyectos, tomando como referencia los dominios funcionales definidos por BIAN.
+
+    \item Definir los contratos de integración y las reglas de composición que garantizan el desacoplamiento entre módulos y proyectos.
+
+    \item Diseñar e implementar el sistema de composición modular alineado con los contratos de integración definidos y el marco de referencia establecido.
+
+    \item Validar que el sistema de composición modular permite incorporar funcionalidades transversales de forma desacoplada en los proyectos generados.
+
+    \item Verificar que las funcionalidades transversales implementadas cumplen con los lineamientos de alineación con los estándares BIAN e ISO 20022 definidos en el marco de referencia.
+\end{enumerate}
+
+\subsubsection*{Fase 4: Evaluación y validación del artefacto}
+
+Evaluó la solución desarrollada mediante un caso de estudio en el Laboratorio Digital del Banco W, midiendo el tiempo de configuración inicial frente a proyectos existentes como línea base, la correcta incorporación de un módulo reutilizable y el inicio de implementación de lógica de negocio en el proyecto generado.
+
+\paragraph*{Actividades relacionadas}
+
+\begin{enumerate}
+    \item Definir los criterios de evaluación del caso de estudio, incluyendo la medición del tiempo de configuración inicial frente a la línea base de proyectos existentes, la incorporación de un módulo reutilizable y el inicio de implementación de lógica de negocio en el proyecto generado.
+
+    \item Aplicar la solución en un caso de estudio en el Laboratorio Digital del Banco W, generando un proyecto base e incorporando un módulo reutilizable en un entorno de desarrollo real.
+
+    \item Recolectar y analizar los datos obtenidos sobre el tiempo de configuración inicial, la incorporación del módulo reutilizable y el inicio de implementación de lógica de negocio, comparando los resultados frente a la línea base establecida.
+
+    \item Elaborar el informe de evaluación con los hallazgos y recomendaciones sobre la pertinencia del artefacto.
+\end{enumerate}
+
+\section{Resultados obtenidos}
+
+El trabajo produjo cuatro resultados, uno por fase, y cada uno se desarrolla
+en el capítulo correspondiente.
+
+\begin{enumerate}
+\item \textbf{Un marco de referencia técnico} que encuadra la solución como
+línea de producto de software y fija la arquitectura de la familia de
+proyectos que la herramienta genera, con sus fundamentos adoptados, la
+organización del código, los contratos de integración y el modelo de
+gobierno de los activos. Es el insumo del que depende todo lo demás, y se
+desarrolla en el Capítulo~\ref{cap:fundamentacion}.
+
+\item \textbf{Un mecanismo de generación de proyectos}, materializado en una
+herramienta de línea de comandos instalable que produce un proyecto backend
+ejecutable sin intervención manual, con las convenciones del marco aplicadas,
+el entorno de trabajo configurado y su documentación de API generada bajo el
+estándar OpenAPI. Junto a él, un almacén de plantillas en el que una
+plantilla es un activo que se describe a sí mismo, con dos plantillas
+publicadas que derivan formas de producto distintas. Se desarrolla en el
+Capítulo~\ref{cap:generacion}.
+
+\item \textbf{Un gestor de módulos reutilizables} que incorpora una
+funcionalidad transversal a un proyecto ya en curso, informa de su estado, la
+actualiza preservando el código propio del equipo y permite retirarla, todo a
+través de contratos de integración declarados en un artefacto neutral. El
+catálogo cuenta con dos módulos construidos, de naturaleza distinta entre sí.
+Se desarrolla en el Capítulo~\ref{cap:gestor}.
+
+\item \textbf{Un informe de evaluación} del artefacto construido, medido con
+las personas del contexto de aplicación y contra una línea base establecida
+antes de que la herramienta existiera. Se desarrolla en el
+Capítulo~\ref{cap:evaluacion}.
+\end{enumerate}
+
+Los activos de la línea quedaron publicados en el registro de paquetes de la
+organización, que es la condición sin la cual ninguno de los tres primeros
+resultados sería utilizable por un equipo distinto del que los construyó.
+
+\input{src/6-riesgos_eticos.tex}
+
+\section{Resumen del capítulo}
+
+Este capítulo estableció el problema, los objetivos y el marco dentro del
+cual se movió el trabajo. El problema es que iniciar un proyecto backend y
+dotarlo de funcionalidades transversales es, en el contexto estudiado, un
+proceso manual que se concentra en pocas personas y que produce proyectos
+que divergen entre sí. La respuesta comprometida es una herramienta que
+genere proyectos estandarizados y permita componerles capacidades
+reutilizables, construida bajo Design Science Research en cuatro fases.
+
+Dos cosas quedaron declaradas aquí, y las dos deben retenerse al leer lo que
+sigue. La primera son las dos divergencias respecto de los objetivos
+comprometidos, el piso de la plataforma de ejecución y la exclusión de uno de
+los dos estándares financieros, que se nombran antes de desarrollarlas en
+lugar de dejarlas para el cierre. La segunda son las delimitaciones bajo las
+que el trabajo operó, en particular que el problema se levantó sobre un único
+caso de estudio y que la alineación con el estándar de negocio se sostiene
+sobre el documento oficial de una sola capacidad.
+
+Los cuatro capítulos siguientes desarrollan una fase cada uno, en el orden en
+que se ejecutaron, y el séptimo cierra el trabajo contra los objetivos que
+este capítulo transcribe. El Capítulo~\ref{cap:marco} fija antes el
+vocabulario y revisa lo que existe.

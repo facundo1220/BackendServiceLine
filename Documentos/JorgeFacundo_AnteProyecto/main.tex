@@ -1,0 +1,163 @@
+%%%%%%%%%%%%%%%%
+% MAIN
+%%%%%%%%%%%%%%%%
+
+%% Formato para la presentación de  proyectos de grado. 
+%% Maestría en Ingeniería de Software
+%% Pontificia Universidad Javeriana
+%% Elaborado por Angela Villota y Luisa Rincón
+%% Inspirado en Formato elaborado para carrera de Ing de Sistemas
+%% V 1.0 Abril - 2025
+
+\documentclass[12pt]{article}
+
+% *** PACKAGES *** %
+
+\usepackage{float}
+
+\usepackage{pgfgantt}
+
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{amssymb}
+
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{titling}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{blindtext}
+\usepackage{hyperref}
+\usepackage{natbib} %% para citaciones
+\usepackage[format=hang,font=small,labelfont=bf]{caption}
+
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{subfig}
+\usepackage{xcolor}
+
+\setlength{\marginparwidth}{2cm}
+\usepackage[colorinlistoftodos]{todonotes}
+
+\geometry{letterpaper}
+
+\graphicspath{{img/}} %ruta de la carpeta en donde estaràn las imágenes
+
+\onehalfspacing
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{2}
+
+\definecolor{light-gray}{gray}{0.95}
+\newcommand{\code}[1]{\colorbox{light-gray}{\texttt{#1}}}
+
+\renewcommand\maketitlehooka{\null\mbox{}\vfill}
+\renewcommand\maketitlehookd{\vfill\null}
+
+\begin{document}
+%crear titulo
+%\maketitle
+
+%%%%%%%%%%%%%%%%%
+% Portada del Anteproyecto
+%%%%%%%%%%%%%%%%%
+
+\input{src/00-titulo}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Ficha resumen
+%%%%%%%%%%%%%%%%%
+
+\input{src/00-ficha-resumen}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Indices y tablas
+%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+\listoffigures
+%\listoftables
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Resumen y Abstract
+%%%%%%%%%%%%%%%%%
+\input{src/00-resumen-abstract}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Todos
+%%%%%%%%%%%%%%%%%
+
+%\listoftodos
+%\newpage
+
+%%%%%%%%%%%%%%%%%
+% Problema
+%%%%%%%%%%%%%%%%%
+
+\input{src/1-problema}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Objetivos
+%%%%%%%%%%%%%%%%%
+
+\input{src/2-objetivos}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Resultados esperados
+%%%%%%%%%%%%%%%%%
+
+\input{src/3-resultados}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Alcance
+%%%%%%%%%%%%%%%%%
+
+\input{src/4-alcance}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Marco conceptual
+%%%%%%%%%%%%%%%%%
+
+\input{src/5-marco}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Riesgos éticos
+%%%%%%%%%%%%%%%%%
+
+\input{src/7-riesgos eticos}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Metodología
+%%%%%%%%%%%%%%%%%
+
+\input{src/6-metodologia}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Cronograma
+%%%%%%%%%%%%%%%%%
+
+\input{src/8-cronograma}
+\newpage
+
+%%%%%%%%%%%%%%%%%
+% Referencias
+%%%%%%%%%%%%%%%%%
+
+\input{src/9-referencias}
+
+\end{document}

@@ -1,0 +1,94 @@
+%%==========================================================
+%%  RIESGOS ÉTICOS
+%%  Se incluye como sección final del Capítulo 1.
+%%==========================================================
+
+\section{Riesgos éticos}
+\label{sec:riesgos-eticos}
+
+Un sistema que estandariza y automatiza el inicio de aplicaciones concentra
+en un único punto decisiones técnicas que después se replican en varios
+proyectos. En un contexto financiero esa concentración importa más, por el
+manejo de información sensible y de lógica de negocio regulada. El proyecto
+identificó cuatro riesgos éticos al plantearse, cada uno con la mitigación a
+la que se comprometía, y lo que corresponde decir aquí es cuál de las cuatro
+se cumplió. El veredicto final de cada uno, con la evidencia de la
+evaluación, lo da el Capítulo~\ref{cap:evaluacion}.
+
+\paragraph*{Exposición de información sensible en plantillas y módulos}
+
+El compromiso era separar de forma estricta la estructura base de los valores
+de configuración sensibles, promoviendo variables de entorno y mecanismos de
+gestión de secretos desde el diseño. \textbf{Se cumplió, y quedó verificado
+por ejecución.} Es lo que la especificación de requerimientos exige como
+atributo de configurabilidad y lo que el artefacto hace, porque ninguna
+dirección ni credencial vive en el código del producto, toda
+configuración entra por variable de entorno validada contra un esquema, el
+circuito de verificación barre el código del producto derivado buscando
+valores fijos y direcciones, y el registro de eventos del producto redacta
+por nombre de clave todo secreto o identificador de persona. La verificación
+automática es más de lo que el compromiso pedía.
+
+\paragraph*{Propagación de lógica financiera mal interpretada}
+
+El compromiso era someter a revisión técnica especializada los módulos con
+lógica financiera antes de incorporarlos al catálogo. \textbf{El riesgo no se
+materializó}, porque ninguno de los dos módulos construidos lleva lógica
+financiera, ya que uno guarda y lee registros y el otro exporta señales de
+observabilidad. Las dos capacidades son técnicas y transversales por decisión
+del marco, que reparte lo técnico al módulo y el dominio al producto. Lo que
+queda escrito es la condición de reactivación, porque el día que el catálogo
+reciba un módulo que interprete un estándar financiero, y el de mensajería
+excluido en la sección~\ref{sec:fundamentos-adoptados} es el caso obvio, la
+revisión especializada es exigible antes de su entrada.
+
+\paragraph*{Exclusión de equipos con menor capacidad técnica}
+
+El compromiso tenía dos partes y \textbf{se cumplió a medias}. La primera era
+elaborar documentación accesible orientada a distintos niveles de
+experiencia, y \textbf{no se construyó}. La propuesta existió, y se descartó
+con un argumento de oportunidad, que esa documentación crece con los módulos
+incorporados y hacerla antes documenta un producto que todavía va a cambiar
+de forma. El argumento es razonable como decisión de alcance de una fase y no
+es una respuesta al riesgo ético, porque nadie advirtió que lo fuera, ya que
+el rechazo comparó la propuesta contra el calendario y no contra el
+compromiso. Se declara así, y la documentación por niveles queda como
+recomendación de adopción.
+
+La segunda parte sí está. El producto derivado nace con documentación que
+explica qué es, qué hace cada operación, cuál lleva efecto de negocio y cuál
+es un andamio; el recorrido de creación se lee en lenguaje de negocio con el
+nombre del estándar al lado; la herramienta declara su alcance antes de
+escribir y pide confirmación; y los mensajes de error dicen qué encontró, qué
+esperaba y qué resuelve la situación. Todo eso baja la barrera de adopción,
+que es lo que el riesgo persigue. El acompañamiento con procesos de formación
+y transferencia de conocimiento es organizacional y queda fuera de lo que un
+artefacto puede resolver.
+
+\paragraph*{Concentración de poder técnico en quienes controlan el sistema}
+
+El compromiso era definir un modelo de gobernanza distribuido con procesos
+participativos, conocimiento documentado de forma exhaustiva y una evolución
+que responda a necesidades colectivas. \textbf{El mecanismo existe y el
+ejercicio no}, y la razón es una condición del entorno declarada desde la
+segunda fase.
+
+El mecanismo está completo, porque el catálogo declara un responsable por
+activo, la aprobación del gobierno de la línea es obligatoria sobre la ruta
+del manifiesto, y el procedimiento de incorporación tiene sus pasos y sus
+condiciones de validez verificables por tipo de activo. La documentación
+exhaustiva es la parte más fuerte del compromiso, con casi doscientas
+decisiones registradas con su contexto, su alternativa y su traza, más de
+treinta documentos de expediente y un marco con su propio mecanismo de
+evolución, que es lo que permite que otra persona retome el sistema. Y la
+evolución respondió a necesidades que no son del autor, porque las doce
+necesidades y las tres brechas salen de las entrevistas con las personas del
+contexto, y varias rondas de mejora las abrieron una revisión externa y
+reportes de uso.
+
+Lo que no hay es más de un participante. El proyecto se construyó con una
+sola persona en los tres roles, de modo que proponente y revisor coinciden, y
+una gobernanza distribuida instanciada con un participante es un mecanismo
+probado y un ejercicio ausente. Trasladarlo a operación consiste en cambiar
+quién figura como responsable de cada activo, lo que el modelo de gobierno ya
+contempla, y queda como recomendación de adopción.

@@ -1,0 +1,92 @@
+%%%%%%%%%%%%%%%%
+% METODOLOGIA
+%%%%%%%%%%%%%%%%
+
+\section{Metodología del proyecto}
+
+Con el fin de dar cumplimiento al objetivo general propuesto, se adopta el enfoque de Design Science Research (DSR) como metodología general del proyecto \citep{Wieringa2014}. Este enfoque plantea la construcción de un artefacto que solucione de manera útil y efectiva un problema en un dominio determinado, lo cual se alinea de forma directa con la naturaleza del problema identificado y con los resultados esperados del proyecto.
+
+\begin{figure}[H]
+  \scalebox{0.6}{\input{src/diagramas/metodologia}}
+  \caption{Fases de la metodología Design Science Research aplicada al proyecto}
+  \label{fig:metodologia}
+\end{figure}
+\pagebreak
+
+El desarrollo se organiza en cuatro fases (Figura~\ref{fig:metodologia}), las cuales se clasifican en dos tipos según su tipo de ejecución: fases secuenciales y fases iterativas.
+
+\begin{itemize}
+  \item \textbf{Fases secuenciales:} Este tipo de ejecución responde a que sus actividades requieren consolidar resultados definidos antes de avanzar, sin necesidad de refinamiento progresivo.
+
+  \item \textbf{Fases iterativas:} Este tipo de ejecución responde a la complejidad técnica inherente a la construcción del artefacto, donde cada iteración permite refinar progresivamente el resultado a partir de los hallazgos obtenidos en la iteración anterior.
+\end{itemize}
+
+\subsubsection*{Fase 1: Fundamentación y definición del marco de referencia}
+
+Establece las bases conceptuales que orientarán el diseño y construcción del artefacto, mediante el análisis del problema, la revisión de soluciones existentes y la definición de los estándares, convenciones y principios que estructuran la solución.
+
+\paragraph*{Actividades relacionadas}
+
+\begin{enumerate}
+    \item Revisar la literatura y antecedentes sobre estandarización y generación de proyectos de software.
+
+    \item Analizar y comparar soluciones existentes en el ámbito de la generación y estandarización de proyectos de software.
+
+    \item Identificar y seleccionar los principios y buenas prácticas que fundamentarán la solución, incluyendo arquitectura hexagonal y Domain-Driven Design.
+
+    \item Revisar y adoptar los estándares del sector financiero aplicables, como BIAN e ISO 20022, como referencia para la definición de dominios y capacidades bancarias reutilizables.
+
+    \item Definir las convenciones técnicas y patrones de desarrollo que conformarán la herramienta.
+\end{enumerate}
+
+\subsubsection*{Fase 2: Diseño y construcción del mecanismo de generación de proyectos}
+
+Diseña y construye de forma iterativa el mecanismo que permite generar proyectos con una estructura modular estandarizada desde el inicio, alineada con el marco de referencia definido en la fase anterior, reduciendo el tiempo de arranque y garantizando coherencia entre proyectos.
+
+\paragraph*{Actividades relacionadas}
+
+\begin{enumerate}
+    \item Definir los requisitos y parámetros del mecanismo de generación de proyectos.
+
+    \item Diseñar la estructura modular base alineada con los principios arquitectónicos y estándares bancarios definidos en el marco de referencia.
+
+    \item Construir el mecanismo de generación de proyectos alineado con el marco de referencia definido.
+
+    \item Configurar el entorno de desarrollo de forma reproducible, incluyendo convenciones de código y herramientas base.
+
+    \item Implementar la generación automática de documentación openAPI basada en la estructura del proyecto generado.
+\end{enumerate}
+
+\subsubsection*{Fase 3: Diseño y construcción del gestor de modulos reutilizables}
+
+Diseña y construye de forma iterativa el sistema que permite incorporar funcionalidades transversales en los proyectos de forma desacoplada, mediante contratos de integración definidos y compartidos entre proyectos, garantizando su reutilización sin generar dependencias entre su implementación concreta y la lógica de negocio de cada proyecto.
+
+\paragraph*{Actividades relacionadas}
+
+\begin{enumerate}
+    \item Identificar y categorizar las funcionalidades transversales reutilizables entre proyectos, tomando como referencia los dominios funcionales definidos por BIAN.
+
+    \item Definir los contratos de integración y las reglas de composición que garantizan el desacoplamiento entre módulos y proyectos.
+
+    \item Diseñar e implementar el sistema de composición modular alineado con los contratos de integración definidos y el marco de referencia establecido.
+
+    \item Validar que el sistema de composición modular permite incorporar funcionalidades transversales de forma desacoplada en los proyectos generados.
+
+    \item Verificar que las funcionalidades transversales implementadas cumplen con los lineamientos de alineación con los estándares BIAN e ISO 20022 definidos en el marco de referencia.
+\end{enumerate}
+
+\subsubsection*{Fase 4: Evaluación y validación del artefacto}
+
+Evalúa la solución desarrollada mediante un caso de estudio en el Laboratorio Digital del Banco W, midiendo el tiempo de configuración inicial frente a proyectos existentes como línea base, la correcta incorporación de un módulo reutilizable y el inicio de implementación de lógica de negocio en el proyecto generado.
+
+\paragraph*{Actividades relacionadas}
+
+\begin{enumerate}
+    \item Definir los criterios de evaluación del caso de estudio, incluyendo la medición del tiempo de configuración inicial frente a la línea base de proyectos existentes, la incorporación de un módulo reutilizable y el inicio de implementación de lógica de negocio en el proyecto generado.
+    
+    \item Aplicar la solución en un caso de estudio en el Laboratorio Digital del Banco W, generando un proyecto base e incorporando un módulo reutilizable en un entorno de desarrollo real.
+    
+    \item Recolectar y analizar los datos obtenidos sobre el tiempo de configuración inicial, la incorporación del módulo reutilizable y el inicio de implementación de lógica de negocio, comparando los resultados frente a la línea base establecida.
+    
+    \item Elaborar el informe de evaluación con los hallazgos y recomendaciones sobre la pertinencia del artefacto.
+\end{enumerate}

@@ -1,0 +1,144 @@
+%%==========================================================
+%%  DOCUMENTO PRINCIPAL
+%%  Maestría en Ingeniería de Software
+%%  Pontificia Universidad Javeriana
+%%  Elaborado por Angela Villota y Luisa Rincón — V 1.0 Abril 2022
+%%==========================================================
+
+%%----------------------------------------------------------
+%%  PAQUETES
+%%----------------------------------------------------------
+
+\documentclass[11pt,twoside,openany]{thesis}
+\usepackage{enumerate}
+\usepackage{longtable}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{makeidx}
+\usepackage{graphics}
+\usepackage{natbib}
+\usepackage[spanish,es-tabla]{babel}
+\hbadness=10000
+
+%%----------------------------------------------------------
+%%  TÍTULO DEL PROYECTO
+%%----------------------------------------------------------
+
+\titulo{Desarrollo de una herramienta CLI para la generación automatizada de proyectos backend e integración de módulos reutilizables}
+
+%%----------------------------------------------------------
+%%  AUTORES
+%%----------------------------------------------------------
+
+\autorA{codigo}{Jorge Andres Facundo Solarte}
+
+%%----------------------------------------------------------
+%%  FECHA Y DIRECTORES
+%%----------------------------------------------------------
+
+\fecha{xx de xx de xx}
+
+\directorproyecto{Mg.}{Juan Carlos Martinez Arias}
+\directorcarrera{Ph.D.}{Luisa Rincón}
+
+\input{format}
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+%%----------------------------------------------------------
+%%  CARTAS DE PRESENTACIÓN
+%%----------------------------------------------------------
+
+\makecoverletter
+
+%%----------------------------------------------------------
+%%  FICHA RESUMEN
+%%----------------------------------------------------------
+
+\newpage
+\input{src/00-ficha_resumen}
+
+%%----------------------------------------------------------
+%%  AGRADECIMIENTOS
+%%----------------------------------------------------------
+
+\input{src/00-agradecimientos}
+
+%%----------------------------------------------------------
+%%  ABSTRACT / RESUMEN
+%%----------------------------------------------------------
+
+\input{src/0-abstract.tex}
+
+%%----------------------------------------------------------
+%%  TABLA DE CONTENIDOS
+%%----------------------------------------------------------
+  
+\newpage{\ } 
+\thispagestyle{empty} 
+\tableofcontents 
+\listoffigures   \listoftables   \mainmatter
+
+\dominitoc
+\cleardoublepage
+
+%%----------------------------------------------------------
+%%  CAPÍTULO 1: INTRODUCCIÓN
+%%----------------------------------------------------------
+
+\chapter{Introducción}
+\input{src/1-introduccion.tex}
+
+%%----------------------------------------------------------
+%%  CAPÍTULO 2: MARCO TEÓRICO Y ESTADO DEL ARTE
+%%----------------------------------------------------------
+
+\chapter{Marco teórico y estado del arte}
+\input{src/2-marco.tex}
+
+%%----------------------------------------------------------
+%%  CAPÍTULO 3: ANÁLISIS DEL PROBLEMA Y MARCO DE REFERENCIA DE LA SOLUCIÓN
+%%----------------------------------------------------------
+
+\chapter{Análisis del problema y marco de referencia de la solución}
+\input{src/3-fundamentacion.tex}
+
+%%----------------------------------------------------------
+%%  CAPÍTULO 4: DISEÑO Y CONSTRUCCIÓN DEL MECANISMO DE GENERACIÓN DE PROYECTOS
+%%----------------------------------------------------------
+
+\chapter{Diseño y construcción del mecanismo de generación de proyectos}
+\input{src/4-generacion-proyectos.tex}
+
+%%----------------------------------------------------------
+%%  CAPÍTULO 5: DISEÑO Y CONSTRUCCIÓN DEL GESTOR DE MÓDULOS REUTILIZABLES
+%%----------------------------------------------------------
+
+\chapter{Diseño y construcción del gestor de módulos reutilizables}
+\input{src/5-gestor-modulos.tex}
+
+%%----------------------------------------------------------
+%%  CAPÍTULO 6: EVALUACIÓN Y VALIDACIÓN DEL ARTEFACTO
+%%----------------------------------------------------------
+
+\chapter{Evaluación y validación del artefacto}
+\input{src/6-evaluacion-validacion.tex}
+
+%%----------------------------------------------------------
+%%  CAPÍTULO 7: CONCLUSIONES
+%%----------------------------------------------------------
+
+\chapter{Conclusiones}
+\input{src/7-conclusiones.tex}
+
+%%----------------------------------------------------------
+%%  BIBLIOGRAFÍA
+%%----------------------------------------------------------
+
+\bibliographystyle{apalike}
+\bibliography{biblio}
+
+\end{document}

@@ -1,0 +1,44 @@
+Comando: bsl new --template nestjs-hexagonal-api --non-interactive --project-name term-deposit-api --service-domain Term Deposit --operations initiate,retrieve,update --description Term deposit service domain API --owner Deposits team --author-email team@example.org --skip-git
+Herramienta: @bsl/cli 0.33.0
+Columnas: 92   Lineas: 35   Lienzo: 915x788 px
+Impreso: 7.96pt con fraccion 1.00
+Codigo de salida: 0
+Fecha: 2026-11-12
+
+Salida capturada, sin editar:
+
+  ____   ____  _
+ | __ ) / ___|| |
+ |  _ \ \___ \| |
+ | |_) | ___) | |___
+ |____/ |____/|_____|
+ BACKEND SERVICE LINE · 0.33.0
+
+  >   Catalog 0.6.0 from the cache
+  >   Resolving @bsl/nestjs-hexagonal-api@0.21.0
+  ok  @bsl/nestjs-hexagonal-api@0.21.0 resolved  0ms
+
+  […] previsualizacion del plan, que el bloque siguiente repite ya aplicado
+Product created at ~/proyectos/term-deposit-api
+────────────────────────────────────────────────────────────
+  Service domain   Term Deposit (Operations and Execution / Loans and Deposits)
+  Aggregate        TermDeposit
+  Operations       initiate, retrieve, update
+  Routes           Resource routes, hanging from /term-deposits
+  Business effect  3 of 3 operations carry one
+  Persistence      in-memory, data is lost when the process stops
+  Events           in-process, no external consumers configured
+  Template         @bsl/nestjs-hexagonal-api@0.21.0
+  ok  59 files written
+
+Next steps:
+───────────
+  cd term-deposit-api
+  npm install
+  cp .env.example .env
+  npm run start:dev  # nest start --watch
+  Read README.md for what else this product needs
+
+Verify it the way the line does:
+────────────────────────────────
+  npm run verify  # npm run lint && npm run test && npm run build

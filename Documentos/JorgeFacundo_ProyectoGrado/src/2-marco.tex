@@ -1,0 +1,173 @@
+%%==========================================================
+%%  CAPÍTULO 2: MARCO TEÓRICO Y ESTADO DEL ARTE
+%%==========================================================
+
+\label{cap:marco}
+
+\section{Marco teórico}
+% Migrado desde Anteproyecto, sección 5.1 (Bases Teóricas)
+La revisión conceptual se organiza en cuatro grupos que avanzan de lo
+general a lo específico, desde los fundamentos de la disciplina hasta los
+estándares propios del dominio financiero en el que opera el contexto de
+aplicación.
+
+\subsection{Fundamentos de la ingeniería de software}
+
+Las primeras entradas fijan el vocabulario general sobre el que se apoya
+el resto del capítulo, desde la disciplina misma hasta las piezas de
+software reutilizable con las que se construye un producto.
+\paragraph*{Ingeniería de Software}
+Enfoque sistemático y disciplinado para el diseño, desarrollo y mantenimiento de sistemas de software. A través de la aplicación de principios de ingeniería y buenas prácticas, esta disciplina busca construir soluciones confiables, eficientes y escalables que respondan a necesidades específicas de los usuarios o de una organización. Más allá de la implementación de código, la ingeniería de software abarca diversas actividades a lo largo del ciclo de vida de un sistema, incluyendo el análisis de requerimientos, el diseño de la arquitectura, la implementación, las pruebas y el mantenimiento continuo del software, con el fin de garantizar su correcto funcionamiento y evolución en el tiempo \citep{Jazayeri2003}.
+\paragraph*{Ciclo de vida del Software}
+Proceso estructurado utilizado para planificar, desarrollar, probar, desplegar y mantener sistemas de software. Este enfoque organiza el desarrollo en una serie de fases que abarcan desde la conceptualización inicial de un producto hasta su implementación, operación, mantenimiento y eventual retiro. A través de esta estructura, el SDLC permite gestionar de manera ordenada las actividades involucradas en la construcción de software, asegurando que cada etapa produzca los resultados necesarios para la siguiente. De esta forma, el modelo facilita el control del proceso de desarrollo, mejora la eficiencia del trabajo de los equipos y contribuye a garantizar la calidad del software entregado \citep{Jazayeri2003}.
+\paragraph*{Framework de desarrollo}
+Conjunto estructurado de componentes de software reutilizables que provee una base y un conjunto de reglas para crear aplicaciones de forma más eficiente, consistente y estandarizada, facilitando el desarrollo mediante módulos predefinidos, APIs, librerías y herramientas que aceleran la construcción de funcionalidades sin necesidad de programar desde cero elementos comunes, como manejo de datos, control de flujo, seguridad o interfaces de usuario. Además, un framework ayuda a mantener la calidad, coherencia y consistencia del código, promueve buenas prácticas de desarrollo y facilita la organización y colaboración dentro de los equipos de desarrollo a lo largo del ciclo de vida de un proyecto \citep{aws-framework-2026}.
+
+\subsection{Diseño y arquitectura de software}
+
+El segundo grupo reúne los principios de diseño que determinan cómo se
+organiza internamente un proyecto y qué separa su lógica de negocio de
+la tecnología que la soporta. Son los que el marco de referencia de la
+solución adopta más adelante como criterios de estructura.
+\paragraph*{Modularidad en sistemas de Software}
+Principio de desarrollar un sistema mediante la división en subsistemas más pequeños que pueden diseñarse e implementarse de manera relativamente independiente. Estos subsistemas pueden adoptar diferentes formas según el paradigma de desarrollo utilizado, como funciones en sistemas estructurados, clases en sistemas orientados a objetos, aspectos en programación orientada a aspectos o componentes en arquitecturas basadas en componentes. En términos generales, todos estos elementos pueden entenderse como unidades funcionales que encapsulan una parte específica de la lógica del sistema \citep{Yu2009}.
+\paragraph*{Domain Driven Design}
+Enfoque que propone centraliza el desarrollo de software en el dominio del negocio, buscando que los modelos reflejen con precisión los procesos y objetivos críticos de la organización \citep{Vernon2013}. Este enfoque facilita la colaboración entre expertos de negocio y desarrolladores mediante un lenguaje común y promueve la estructuración de la aplicación en módulos y contextos delimitados con responsabilidades claras, lo que permite modularidad, desacoplamiento y reutilización de funcionalidades. Además, DDD orienta el diseño de la arquitectura y sus componentes para que estén alineados con el dominio, mejorando la mantenibilidad, la coherencia técnica y la capacidad de evolución controlada del sistema.
+\paragraph*{Arquitectura hexagonal}
+Enfoque arquitectónico que propone organizar las aplicaciones de manera que la lógica central del sistema permanezca independiente de las tecnologías externas.
+
+En este modelo, el núcleo de la aplicación contiene el dominio del sistema, es decir, las reglas de negocio y comportamientos que representan la funcionalidad principal de la aplicación. Al mantener este núcleo aislado de elementos como interfaces de usuario, bases de datos o servicios externos, se busca evitar que las decisiones tecnológicas afecten directamente la lógica del negocio \citep{AlistairCockburn2005}.
+
+Para lograr esta separación, la arquitectura define puertos, que representan interfaces mediante las cuales el núcleo del sistema expone sus funcionalidades, y adaptadores, que son componentes encargados de conectar estas interfaces con tecnologías específicas. De esta manera, los adaptadores traducen las interacciones provenientes del exterior hacia las operaciones definidas por el dominio de la aplicación, permitiendo desacoplar la lógica de negocio de los detalles de infraestructura y facilitando la evolución y mantenimiento del sistema \citep{AlistairCockburn2005}.
+
+\subsection{Líneas de producto de software}
+
+El tercer grupo corresponde al enfoque de ingeniería bajo el cual se
+encuadra la solución propuesta. Define qué es una familia de productos
+construida sobre activos comunes, cómo se separa la construcción de esos
+activos de la de cada producto, cómo se representa lo que varía entre
+ellos, y qué ocurre cuando esa reutilización se resuelve copiando.
+\paragraph*{Línea de Producto de Software}
+Conjunto de sistemas intensivos en software que comparten un conjunto común y gestionado de características, que satisfacen las necesidades de un segmento determinado del mercado o de una misión, y que se desarrollan a partir de un conjunto común de activos siguiendo un procedimiento establecido \citep{Clements2001}. El enfoque surge de reconocer que las similitudes entre los productos de una organización pueden tratarse como una ventaja de ingeniería, y no como una coincidencia que cada proyecto resuelve por su cuenta.
+
+De la definición se desprenden cuatro elementos constitutivos, cuya ausencia impide hablar de una línea de producto. El primero es un alcance gestionado, es decir, la declaración explícita de qué productos pertenecen a la familia; sin él los activos se generalizan hasta volverse inservibles o se especializan hasta servir a un solo producto. El segundo es una arquitectura común compartida por todos los productos, que es lo que hace posible que un mismo activo sirva a varios. El tercero son los activos centrales o \emph{core assets}, que incluyen arquitectura, contratos, modelos y documentación, y no solo código. El cuarto es un mecanismo de derivación, entendido como el procedimiento que produce un producto concreto a partir de los activos y de una selección de características \citep{Clements2001}.
+
+Una línea de producto no es una categoría de herramienta sino un
+enfoque de ingeniería, y esa distinción es la que evita el error más
+frecuente al interpretar la literatura. Los generadores de
+plantillas, los gestores de paquetes y las plataformas internas de
+desarrollo son mecanismos de reutilización. Cada uno atiende una
+preocupación concreta dentro de su ámbito, pero ninguno declara
+alcance, arquitectura ni procedimiento, porque no es su propósito.
+Una línea de producto no los sustituye ni compite con ellos, sino
+que opera en un plano distinto, los ordena y se materializa
+empleándolos \citep{Clements2001}.
+\paragraph*{Ingeniería de dominio e ingeniería de aplicación}
+Construir los activos reutilizables y construir un producto con ellos son actividades distintas, con insumos, salidas y ritmos diferentes, por lo que la disciplina las separa en dos ciclos. La ingeniería de dominio toma el conocimiento del dominio como insumo y produce los activos, incluidos el modelo de variabilidad y los componentes reutilizables. La ingeniería de aplicación toma los requerimientos de un producto concreto, consulta esos activos y produce el producto \citep{Pohl2005}.
+
+La relación entre ambos ciclos no es de un solo sentido. La ingeniería de aplicación consume los activos, pero también puede revelar una necesidad que el dominio no había contemplado y que debe incorporarse a los activos comunes, quedando así disponible para todos los productos futuros \citep{Pohl2005}.
+\paragraph*{Variabilidad y modelo de características}
+La variabilidad es la propiedad de un activo de admitir más de una realización, y un punto de variación es el lugar concreto donde esa elección ocurre. El mecanismo formal para representar qué varía entre los productos de una familia y qué permanece fijo es el modelo de características o \emph{feature model}, introducido por el método de análisis de dominio orientado a características \citep{Kang1990}. Un modelo de este tipo organiza las características en forma de árbol y declara, para cada nodo, si es obligatoria, opcional, alternativa o acumulativa respecto de su padre, junto con las restricciones que cruzan el árbol \citep{Apel2013}.
+
+Una característica no solo se selecciona, sino que también se
+resuelve en algún momento del ciclo de vida del producto, y ese
+momento se denomina tiempo de ligado o \emph{binding time}. Una
+característica resuelta durante la generación queda escrita en el
+código y cambiarla exige volver a derivar el producto; una resuelta
+en tiempo de ejecución puede modificarse mediante configuración
+externa sin regenerar nada. El ligado temprano produce productos más
+simples y verificables a costa de flexibilidad posterior, mientras
+que el ligado tardío conserva flexibilidad a costa de exigir
+mecanismos de configuración y validación \citep{Apel2013}.
+\paragraph*{Clone-and-own}
+Construcción de un producto nuevo a partir de la copia de uno existente, sin que se conserve vínculo alguno entre la copia y su origen. La literatura lo reconoce como una forma legítima de reutilización en etapas tempranas, por su bajo costo inicial y su nula fricción de adopción \citep{Dubinsky2013}.
+
+El problema que la literatura documenta de manera característica es
+la divergencia progresiva. Al no existir un mecanismo que propague
+los cambios, cada copia evoluciona por su cuenta, lo que incrementa
+el esfuerzo de propagación, de análisis de dominio y de control de
+calidad, y genera conflictos cuando el origen y las copias
+evolucionan en paralelo. El costo de esta práctica crece con el
+número de copias \citep{Dubinsky2013}.
+
+\subsection{Estándares del sector financiero}
+
+El último grupo recoge los estándares del dominio en el que opera el
+contexto de aplicación, que delimitan cómo se nombran y se organizan las
+capacidades de negocio de una entidad bancaria y cómo se estructura el
+intercambio de información entre instituciones.
+\paragraph*{BIAN (Banking Industry Architecture Network)}
+Asociación global independiente y sin fines de lucro formada por instituciones financieras, proveedores de software, consultoras, integradores y académicos con el propósito de definir y promover un marco arquitectónico común para la banca. La misión de BIAN es ofrecer un modelo estandarizado de referencia para la interoperabilidad de sistemas bancarios, apoyando la innovación tecnológica, reduciendo los costos de integración y simplificando la arquitectura de TI en el sector financiero. Para lograr esto, BIAN reúne experiencia de su comunidad para crear un marco de mejores prácticas que los bancos pueden utilizar al diseñar, implementar y probar servicios y plataformas financieras \citep{bian-2026}.
+\paragraph*{ISO 20022}
+Estándar internacional de mensajería financiera desarrollado por el Technical Committee ISO/TC68 Financial Services de la Organización Internacional de Normalización (ISO). Este estándar proporciona una plataforma común para el desarrollo de mensajes financieros mediante un conjunto de reglas, un diccionario de datos y un catálogo de modelos que describen los procesos de negocio y los elementos de datos utilizados en las comunicaciones financieras. Los modelos y los mensajes derivados se publican en el ISO 20022 Financial Repository, lo que permite a las instituciones financieras definir conjuntos de mensajes basados en un enfoque internacionalmente acordado y consistente en cuanto a semántica y estructura \citep{iso20022-2026}.
+
+\section{Estado del arte}
+\label{sec:estado-del-arte}
+% Migrado desde Anteproyecto, sección 5.2 (Antecedentes)
+En el desarrollo de software, se han implementado diversas estrategias y herramientas para agilizar el inicio de proyectos y garantizar consistencia en las prácticas de desarrollo. Estas soluciones pueden organizarse jerárquicamente según su alcance y complejidad, desde los fundamentos conceptuales hasta plataformas completas de gestión del ciclo de vida de aplicaciones.
+
+\subsection{Fundamentos conceptuales}
+\paragraph*{Scaffolding}
+Técnica que permite generar automáticamente la estructura básica de una aplicación o de determinados componentes dentro de un proyecto. A partir de configuraciones o modelos definidos, las herramientas de scaffolding crean archivos, directorios y código inicial necesarios para implementar funcionalidades comunes. Esto permite a los desarrolladores contar con una base funcional sobre la cual continuar el desarrollo, acelerando las primeras etapas de construcción del sistema.
+
+Diversos frameworks modernos incorporan herramientas de scaffolding que permiten generar automáticamente módulos o componentes predefinidos, reduciendo el tiempo necesario para implementar nuevas funcionalidades. Por ejemplo, el framework NestJS proporciona una herramienta de línea de comandos (CLI) que permite generar elementos como módulos, controladores y servicios mediante comandos específicos, simplificando la creación de estructuras estándar dentro de las aplicaciones \citep{nestjs-2026}.
+\paragraph*{Boilerplate}
+Fragmentos de código que pueden reutilizarse en diferentes contextos con pocas o ninguna modificación. Este término proviene originalmente del uso de plantillas en documentos, donde se reutilizan textos estándar que luego se adaptan ligeramente a situaciones específicas. De forma similar, en el desarrollo de software los programadores utilizan secciones de código previamente escritas para evitar tener que implementarlas nuevamente desde cero \citep{aws-boilerplate-2026}.
+
+El uso de boilerplate permite mejorar la eficiencia del desarrollo, ya que facilita la reutilización de código probado y reduce el tiempo necesario para implementar funcionalidades comunes. Además, contribuye a mantener consistencia en la estructura del software y disminuir errores derivados de la repetición manual de código \citep{aws-boilerplate-2026}.
+
+\subsection{Herramientas especializadas de generación de código}
+\paragraph*{Yeoman}
+Herramienta de código abierto diseñada para facilitar la creación de nuevos proyectos mediante el uso de generadores. Estos generadores actúan como complementos que pueden ejecutarse desde la línea de comandos para generar automáticamente proyectos completos o partes específicas de una aplicación.
+
+El objetivo de Yeoman es ayudar a los desarrolladores a iniciar proyectos rápidamente, proporcionando estructuras iniciales, configuraciones y herramientas que incorporan buenas prácticas de desarrollo \citep{yeoman-2026}.
+\paragraph*{Cookiecutter}
+Herramienta de generación de proyectos a partir de plantillas, agnóstica de lenguaje, que permite a un equipo partir siempre de una base consistente y reducir la configuración manual repetida. 
+    
+Sus plantillas son directorios con una raíz parametrizada y un archivo de declaración de variables. Al ejecutarse, la herramienta sustituye esas variables tanto en el contenido como en los nombres de archivos y carpetas mediante el motor Jinja2, y admite condicionales, bucles y scripts de validación antes y después de la generación \citep{cookiecutter-2023}.
+\paragraph*{Cruft}
+Complemento construido sobre Cookiecutter que resuelve la desalineación entre una plantilla y los proyectos generados a partir de ella.
+    
+Para lograrlo, registra en el proyecto la versión exacta de la plantilla utilizada, lo que permite comprobar en cualquier momento si el proyecto quedó desactualizado. Al solicitar una actualización, la herramienta aplica los cambios pendientes mediante un proceso de fusión similar al de un sistema de control de versiones \citep{cruft-2026}.
+\paragraph*{Copier}
+Generador de proyectos a partir de plantillas que mantiene un vínculo persistente entre la plantilla y los proyectos ya generados. Cada proyecto registra la versión de plantilla con la que fue creado, y su comando de actualización reconstruye el proyecto tal como era con esa versión, calcula las modificaciones que introdujo el desarrollador, genera el resultado con la versión nueva de la plantilla y reaplica encima esos cambios, señalando los conflictos que no puede resolver de forma automática \citep{copier-2026}.
+\paragraph*{CLI de NestJS}
+Herramienta de línea de comandos incorporada al framework NestJS, construida sobre un sistema de \emph{schematics} que describe cómo debe generarse cada elemento. Además de crear los archivos del bloque solicitado, ya sea un módulo, un controlador, un servicio o un recurso completo, modifica el código existente para integrarlo, por ejemplo registrando un servicio recién generado en el arreglo de \emph{providers} de su módulo \citep{nestjs-2026}.
+\paragraph*{Nx.js}
+Plataforma de desarrollo de código abierto orientada a la gestión de repositorios monolíticos (monorepos) y a la automatización de tareas dentro de proyectos de software. Esta herramienta proporciona un sistema de construcción que permite ejecutar y coordinar tareas como compilación, pruebas y análisis de código de manera eficiente, especialmente en proyectos que contienen múltiples aplicaciones o librerías dentro de un mismo repositorio \citep{nx-2026}.
+
+Además, la herramienta puede generar aplicaciones, librerías y componentes mediante plugins y generadores, facilitando la estandarización de la arquitectura y la organización del código en proyectos de gran escala \citep{nx-2026}.
+
+\subsection{Plataformas de desarrollo internas (IDP)}
+\paragraph*{Backstage}
+Framework de código abierto para organizar las herramientas, servicios y documentación utilizados en proyectos de software mediante portales de desarrollo. Originalmente creado por Spotify para enfrentar la creciente complejidad de su infraestructura interna, Backstage permite a los equipos desarrollar y gestionar software de manera más eficiente al proporcionar un punto único de interacción con todos los recursos técnicos de la organización \citep{backstage-2026}.
+
+Su base es un catálogo de software centralizado que contiene metadatos sobre servicios, librerías, pipelines de datos y otros componentes, facilitando su descubrimiento y administración. Además, incluye plantillas de software que permiten generar nuevos proyectos de forma estandarizada según las mejores prácticas de la organización, así como un sistema de documentación técnica integrado (TechDocs) que sigue un enfoque de "docs like code" \citep{backstage-2026}.
+\paragraph*{Port}
+Plataforma diseñada para unificar y organizar todas las herramientas, datos y flujos de trabajo que los equipos de ingeniería utilizan durante el ciclo de vida del software. Es una solución enfocada en mejorar la experiencia del desarrollador proporcionando un punto centralizado donde encontrar, lanzar, operar y automatizar tareas relacionadas con el desarrollo y la infraestructura de software \citep{port-platform-2026}.
+
+Integra varios componentes clave que ayudan a gestionar el ecosistema de desarrollo de forma coherente y eficiente. Entre ellos se encuentran un catálogo de software que unifica metadatos de servicios, entornos y otros activos técnicos, acciones preconfiguradas que estandarizan operaciones repetitivas, un orquestador de flujos de trabajo que automatiza procesos y scorecards para medir la calidad, seguridad y cumplimiento de los estándares del equipo \citep{port-platform-2026}.
+
+\section{Resumen del capítulo}
+
+Este capítulo fijó el vocabulario y revisó lo que existe. El marco teórico
+avanzó de lo general a lo específico, desde los fundamentos de la disciplina
+hasta los dos cuerpos conceptuales de los que el trabajo se sirve de forma
+directa, que son las líneas de producto de software, como enfoque que trata
+la reutilización planificada entre productos de una misma familia, y los
+estándares del sector financiero, que aportan el vocabulario de negocio con
+que se delimita y se nombra un producto.
+
+El estado del arte describió ocho soluciones, organizadas por alcance. Las
+herramientas de plantilla producen el punto de partida de un proyecto nuevo;
+las que sostienen su ciclo de vida registran de qué versión de plantilla
+proviene y propagan los cambios posteriores; y las plataformas de desarrollo
+interno catalogan los activos de una organización y les asignan propiedad.
+Cada una resuelve bien su propia preocupación.
+
+Lo que este capítulo deliberadamente no hace es evaluarlas. Describir una
+herramienta y medirla contra un problema son dos actos distintos, y el
+segundo exige antes haber establecido cuál es el problema. Esa evaluación, y
+las tres brechas que de ella resultan, corresponden al
+Capítulo~\ref{cap:fundamentacion}, que las mide contra los temas
+levantadas en el contexto de aplicación.

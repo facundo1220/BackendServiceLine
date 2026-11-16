@@ -1,0 +1,29 @@
+# Este repositorio publica solo el expediente de implementación y los dos
+# documentos LaTeX. Todo lo demás de la carpeta de trabajo queda fuera.
+/*
+!/.gitignore
+!/README.md
+!/Documentos/
+!/Implementación/
+
+# De Documentos entran el anteproyecto y la tesis; las guías son trabajos de
+# grado de terceros y no se redistribuyen.
+/Documentos/*
+!/Documentos/JorgeFacundo_AnteProyecto/
+!/Documentos/JorgeFacundo_ProyectoGrado/
+
+# Artefactos de compilación de LaTeX
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.synctex.gz
+*.toc
+
+# Sistema operativo
+.DS_Store

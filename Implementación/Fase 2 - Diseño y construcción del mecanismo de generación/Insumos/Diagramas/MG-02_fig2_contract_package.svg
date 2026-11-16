@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="526" viewBox="0 0 720 526" font-family="Inter, Segoe UI, Helvetica Neue, Arial, sans-serif">
+<rect width="720" height="526" fill="#ffffff"/>
+<defs>
+<marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="11" markerHeight="11" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="#323232"/></marker>
+</defs>
+<rect x="32" y="32" width="300" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="182" y="58" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Producto derivado</text>
+<text x="182" y="80" font-size="13" fill="#323232" text-anchor="middle">Declara los puertos que consume</text>
+<text x="182" y="98" font-size="13" fill="#323232" text-anchor="middle">Depende solo de tipos</text>
+<rect x="388" y="32" width="300" height="90" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="1.6"/>
+<text x="538" y="58" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Módulo del catálogo</text>
+<text x="538" y="80" font-size="13" fill="#323232" text-anchor="middle">Implementa puertos técnicos</text>
+<text x="538" y="98" font-size="13" fill="#323232" text-anchor="middle">Declara la versión del contrato</text>
+<rect x="120" y="226" width="480" height="268" rx="8" fill="#dcdcdc" stroke="#323232" stroke-width="2.6"/>
+<text x="360" y="257" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="middle">Contrato de la línea</text>
+<rect x="144" y="272" width="432" height="90" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="360" y="298" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Puertos técnicos</text>
+<text x="360" y="320" font-size="13" fill="#323232" text-anchor="middle">LoggerPort · ConfigPort · DatabasePort</text>
+<text x="360" y="338" font-size="13" fill="#323232" text-anchor="middle">EventPublisherPort · TelemetryPort</text>
+<rect x="144" y="380" width="432" height="90" rx="6" fill="#f0f0f0" stroke="#323232" stroke-width="1.4"/>
+<text x="360" y="406" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">Regla de contenido</text>
+<text x="360" y="428" font-size="13" fill="#323232" text-anchor="middle">Nada que sobreviva al compilar</text>
+<text x="360" y="446" font-size="13" fill="#323232" text-anchor="middle">No se enuncia como solo interfaces</text>
+<polyline points="182,122 182,186 220,186 220,226" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<polyline points="538,122 538,186 500,186 500,226" fill="none" stroke="#323232" stroke-width="1.6" marker-end="url(#p)"/>
+<rect x="138.3" y="140" width="87.5" height="22" fill="#ffffff" stroke="none"/>
+<text x="182" y="156" font-size="13" fill="#323232" text-anchor="middle">depende de</text>
+<rect x="494.3" y="140" width="87.5" height="22" fill="#ffffff" stroke="none"/>
+<text x="538" y="156" font-size="13" fill="#323232" text-anchor="middle">depende de</text>
+</svg>
